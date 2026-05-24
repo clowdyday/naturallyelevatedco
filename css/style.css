@@ -1893,7 +1893,7 @@ a, button { transition: color var(--transition), background var(--transition), o
 
 .nav-dropdown {
   position: absolute;
-  top: calc(100% + 8px);
+  top: 100%;          /* flush against nav item — no gap to fall through */
   left: 50%;
   transform: translateX(-50%) translateY(-6px) scale(0.97);
   transform-origin: top center;
@@ -1908,7 +1908,7 @@ a, button { transition: color var(--transition), background var(--transition), o
   pointer-events: none;
   transition: opacity 0.38s cubic-bezier(0.4, 0, 0.2, 1), transform 0.38s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.38s;
   z-index: 50;
-  padding: 0.35rem 0;
+  padding: 10px 0 0.35rem; /* top padding replaces the old 8px positional gap */
 }
 .nav-item--has-dropdown:hover .nav-dropdown,
 .nav-item--has-dropdown:focus-within .nav-dropdown {
