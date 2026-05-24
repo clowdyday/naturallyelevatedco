@@ -1,8 +1,15 @@
 # Dev tool directories — not for deployment
 .claude/
 .claude-flow/
+.swarm/
 node_modules/
 *.log
+*.db
+*.db-shm
+*.db-wal
+
+# MCP / internal config
+.mcp.json
 
 # OS files
 .DS_Store
