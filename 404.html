@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<!--
+  GitHub Pages SPA routing fix.
+  When a user hits /naturallyelevatedco/shop directly, GitHub Pages serves this 404.html.
+  We redirect to /?p=/shop so index.html can pick it up and restore the correct route.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Naturally Elevated Co.</title>
+  <script>
+    (function () {
+      var l = window.location;
+      // Detect the base path (repo name segment)
+      var seg = l.pathname.split('/').filter(Boolean)[0];
+      var base = seg ? '/' + seg : '';
+      var route = l.pathname.slice(base.length) || '/';
+      // Redirect to index with route encoded as query param
+      l.replace(
+        l.protocol + '//' + l.host + base + '/?p=' + encodeURIComponent(route) +
+        (l.search ? '&' + l.search.slice(1) : '') + l.hash
+      );
+    }());
+  </script>
+</head>
+<body></body>
+</html>

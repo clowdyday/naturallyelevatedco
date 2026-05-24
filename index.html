@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Naturally Elevated Co. — New Mexico-inspired threads for the wandering soul. Desert skies, elevated minds.">
+  <title>Naturally Elevated Co. | Desert Skies. Elevated Minds.</title>
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Naturally Elevated Co.">
+  <meta property="og:title" content="Naturally Elevated Co. | Desert Skies. Elevated Minds.">
+  <meta property="og:description" content="New Mexico-inspired threads for the wandering soul. Desert skies, elevated minds.">
+  <meta property="og:image" content="https://naturallyelevatedco.com/assets/logo.jpg">
+  <meta property="og:url" content="https://naturallyelevatedco.com/">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Naturally Elevated Co. | Desert Skies. Elevated Minds.">
+  <meta name="twitter:description" content="New Mexico-inspired threads for the wandering soul.">
+  <meta name="twitter:image" content="https://naturallyelevatedco.com/assets/logo.jpg">
+  <!-- Theme color for mobile browser chrome -->
+  <meta name="theme-color" content="#111110">
+  <!-- Canonical (updated per-route by seo.js) -->
+  <link rel="canonical" href="https://naturallyelevatedco.com/">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=DM+Sans:wght@400;500&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════
+       STICKY NAVBAR
+  ═══════════════════════════════════════ -->
+  <nav id="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <!-- Logo -->
+      <a href="/" class="nav-logo" data-route aria-label="Naturally Elevated Co. — Home">
+        <div class="logo-circle logo-circle--nav">
+          <img src="assets/logo.jpg" alt="Naturally Elevated Co. logo" width="44" height="44">
+        </div>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <ul class="nav-links" role="list">
+        <li><a href="/" class="nav-link" data-route>HOME</a></li>
+        <li class="nav-item--has-dropdown">
+          <a href="/shop" class="nav-link" data-route>
+            SHOP<svg class="nav-caret" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
+              <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <div class="nav-dropdown" role="menu" aria-label="Shop menu">
+            <a href="/shop" class="nav-dropdown-link" data-route role="menuitem">All Products</a>
+            <div class="nav-dropdown-divider" role="separator"></div>
+            <a href="/shop" class="nav-dropdown-link" data-route data-filter="featured" role="menuitem">Featured Drops</a>
+          </div>
+        </li>
+        <li>
+          <button class="nav-link nav-cart-btn" id="nav-cart-btn" aria-label="Open cart" aria-haspopup="dialog">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 01-8 0"/>
+            </svg>
+            <span id="cart-count" class="cart-count" hidden aria-live="polite">0</span>
+          </button>
+        </li>
+      </ul>
+
+      <!-- Hamburger (mobile) -->
+      <button class="hamburger" id="hamburger-btn" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-nav-overlay">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════
+       MOBILE NAV OVERLAY
+  ═══════════════════════════════════════ -->
+  <div id="mobile-nav-overlay" class="mobile-nav-overlay" role="dialog" aria-modal="true" aria-label="Navigation menu" hidden>
+    <button class="mobile-nav-close" id="mobile-nav-close" aria-label="Close navigation menu">✕</button>
+    <nav>
+      <ul class="mobile-nav-links" role="list">
+        <li><a href="/" class="mobile-nav-link" data-route>HOME</a></li>
+        <li><a href="/shop" class="mobile-nav-link" data-route>SHOP — ALL</a></li>
+        <li><a href="/shop" class="mobile-nav-link" data-route data-filter="featured">FEATURED DROPS</a></li>
+        <li>
+          <button class="mobile-nav-link mobile-nav-cart-btn" id="mobile-cart-btn" aria-label="Open cart">
+            CART <span id="mobile-cart-count" class="cart-count-mobile" hidden>0</span>
+          </button>
+        </li>
+      </ul>
+      <div class="mobile-nav-social">
+        <a href="https://www.instagram.com/naturally_elevated_co/" target="_blank" rel="noopener noreferrer" class="mobile-social-link">Instagram</a>
+        <a href="https://www.etsy.com/shop/naturallyelevatedco" target="_blank" rel="noopener noreferrer" class="mobile-social-link">Etsy</a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       MAIN APP SHELL (views render here)
+  ═══════════════════════════════════════ -->
+  <main id="app" role="main">
+    <!-- Content injected by app.js router -->
+    <div class="loading-state" aria-live="polite">
+      <p>Loading...</p>
+    </div>
+  </main>
+
+  <!-- ═══════════════════════════════════════
+       CART OVERLAY (sits outside #app)
+  ═══════════════════════════════════════ -->
+  <div id="cart-overlay" class="cart-overlay" aria-hidden="true"></div>
+
+  <!-- ═══════════════════════════════════════
+       CART DRAWER
+  ═══════════════════════════════════════ -->
+  <aside id="cart-drawer" class="cart-drawer" role="dialog" aria-modal="true" aria-label="Shopping cart" aria-hidden="true">
+    <div class="cart-drawer-header">
+      <h2 class="cart-drawer-title">YOUR CART</h2>
+      <button class="cart-close-btn" id="cart-close-btn" aria-label="Close cart">✕</button>
+    </div>
+
+    <!-- Cart items (dynamically rendered by cart.js) -->
+    <div id="cart-items" class="cart-items" aria-live="polite">
+      <!-- Items injected here by cart.js renderCartDrawer() -->
+      <div class="cart-empty" id="cart-empty-state">
+        <span class="cart-empty-icon" aria-hidden="true">🌵</span>
+        <p>Nothing here yet.<br>Go find something good.</p>
+        <a href="/" class="btn-outline" data-route>SHOP THE COLLECTION</a>
+      </div>
+    </div>
+
+    <!-- Cart footer (subtotal + checkout) -->
+    <div class="cart-drawer-footer" id="cart-footer" hidden>
+      <div class="cart-subtotal">
+        <span class="cart-subtotal-label">SUBTOTAL</span>
+        <span class="cart-subtotal-price" id="cart-subtotal">$0</span>
+      </div>
+      <p class="cart-shipping-note">Shipping calculated at checkout</p>
+      <button class="btn-primary btn-full" id="checkout-btn" onclick="initiateCheckout()">
+        CHECKOUT
+      </button>
+    </div>
+  </aside>
+
+  <!-- ═══════════════════════════════════════
+       FOOTER (always visible)
+  ═══════════════════════════════════════ -->
+  <footer id="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <a href="/" class="footer-logo" data-route aria-label="Naturally Elevated Co. — Home">
+        <div class="logo-circle logo-circle--footer">
+          <img src="assets/logo.jpg" alt="Naturally Elevated Co. logo" width="58" height="58">
+        </div>
+      </a>
+      <p class="footer-tagline">Desert Skies. Elevated Minds.</p>
+      <nav aria-label="Footer navigation">
+        <ul class="footer-links" role="list">
+          <li><a href="/" class="footer-link" data-route>HOME</a></li>
+          <li><a href="/shop" class="footer-link" data-route>SHOP</a></li>
+          <li><a href="https://www.instagram.com/naturally_elevated_co/" target="_blank" rel="noopener noreferrer" class="footer-link">INSTAGRAM</a></li>
+          <li><a href="https://www.etsy.com/shop/naturallyelevatedco" target="_blank" rel="noopener noreferrer" class="footer-link">ETSY</a></li>
+          <li><a href="mailto:hello@naturallyelevatedco.com" class="footer-link">CONTACT</a></li>
+        </ul>
+      </nav>
+      <p class="footer-fine-print">Printed &amp; shipped from the US. &copy; 2026 Naturally Elevated Co.</p>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════
+       SCRIPTS (order matters — data first)
+  ═══════════════════════════════════════ -->
+  <!-- GitHub Pages SPA route restore (pairs with 404.html redirect) -->
+  <script>
+    (function () {
+      var q = window.location.search;
+      if (q && q[1] === 'p') {
+        var p = decodeURIComponent(q.slice(3).split('&')[0].replace(/~and~/g, '&'));
+        window.history.replaceState(null, null, window.location.pathname.replace(/\/$/, '') + p + window.location.hash);
+      }
+    }());
+  </script>
+
+  <script src="js/data.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/shop.js"></script>
+  <script src="js/product.js"></script>
+  <script src="js/checkout.js"></script>
+  <script src="js/transitions.js"></script>
+  <script src="js/seo.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

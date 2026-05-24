@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Naturally Elevated Co. logo">
+  <title>Naturally Elevated Co.</title>
+  <defs>
+    <!-- Circular path for text to follow (top arc) -->
+    <path id="text-circle-path"
+      d="M 100,100 m -82,0 a 82,82 0 1,1 164,0 a 82,82 0 1,1 -164,0" />
+  </defs>
+
+  <!-- ── Outer ring ── -->
+  <circle cx="100" cy="100" r="94" fill="none" stroke="#EDE8DC" stroke-width="2"/>
+
+  <!-- ── Inner dashed ring ── -->
+  <circle cx="100" cy="100" r="86" fill="none" stroke="#EDE8DC" stroke-width="0.75" stroke-dasharray="3 3"/>
+
+  <!-- ── Curved brand text ── -->
+  <text font-family="'Barlow Condensed', 'Arial Narrow', sans-serif"
+        font-size="11" font-weight="600" letter-spacing="2.2" fill="#EDE8DC">
+    <textPath href="#text-circle-path" startOffset="4%">
+      NATURALLY ELEVATED CO.
+    </textPath>
+  </text>
+
+  <!-- ── Zia sun symbol ──
+       4 groups × 4 rays, each group fans outward in one cardinal direction.
+       Rays are thin rects rotated around center (100,100). -->
+  <!-- North rays (pointing up) -->
+  <g fill="#D4952A">
+    <rect x="94"   y="62" width="2.5" height="9" rx="1"/>
+    <rect x="97.5" y="60" width="2.5" height="11" rx="1"/>
+    <rect x="101"  y="60" width="2.5" height="11" rx="1"/>
+    <rect x="104.5" y="62" width="2.5" height="9" rx="1"/>
+  </g>
+  <!-- South rays (pointing down) — mirror of North -->
+  <g fill="#D4952A" transform="rotate(180, 100, 100)">
+    <rect x="94"   y="62" width="2.5" height="9" rx="1"/>
+    <rect x="97.5" y="60" width="2.5" height="11" rx="1"/>
+    <rect x="101"  y="60" width="2.5" height="11" rx="1"/>
+    <rect x="104.5" y="62" width="2.5" height="9" rx="1"/>
+  </g>
+  <!-- East rays (pointing right) — North rotated 90° -->
+  <g fill="#D4952A" transform="rotate(90, 100, 100)">
+    <rect x="94"   y="62" width="2.5" height="9" rx="1"/>
+    <rect x="97.5" y="60" width="2.5" height="11" rx="1"/>
+    <rect x="101"  y="60" width="2.5" height="11" rx="1"/>
+    <rect x="104.5" y="62" width="2.5" height="9" rx="1"/>
+  </g>
+  <!-- West rays (pointing left) — North rotated 270° -->
+  <g fill="#D4952A" transform="rotate(270, 100, 100)">
+    <rect x="94"   y="62" width="2.5" height="9" rx="1"/>
+    <rect x="97.5" y="60" width="2.5" height="11" rx="1"/>
+    <rect x="101"  y="60" width="2.5" height="11" rx="1"/>
+    <rect x="104.5" y="62" width="2.5" height="9" rx="1"/>
+  </g>
+
+  <!-- ── Zia center circle ── -->
+  <circle cx="100" cy="100" r="13" fill="#D4952A"/>
+
+  <!-- ── Saguaro cactus silhouette (terracotta, on top of sun) ──
+       Main trunk + left arm + right arm -->
+  <!-- Main trunk -->
+  <rect x="97" y="76" width="6" height="34" rx="3" fill="#C4602A"/>
+  <!-- Left arm: horizontal connector + vertical arm -->
+  <rect x="83" y="88" width="14" height="5" rx="2.5" fill="#C4602A"/>
+  <rect x="83" y="77" width="5" height="16" rx="2.5" fill="#C4602A"/>
+  <!-- Right arm: horizontal connector + vertical arm -->
+  <rect x="103" y="88" width="14" height="5" rx="2.5" fill="#C4602A"/>
+  <rect x="112" y="77" width="5" height="16" rx="2.5" fill="#C4602A"/>
+
+  <!-- ── Bottom label ── -->
+  <text x="100" y="166"
+        text-anchor="middle"
+        font-family="'Barlow Condensed', 'Arial Narrow', sans-serif"
+        font-size="7.5" font-weight="600" letter-spacing="2.5" fill="#8A8070">
+    EST. NEW MEXICO
+  </text>
+
+  <!-- ── Small decorative dots flanking bottom text ── -->
+  <circle cx="53" cy="163" r="1.5" fill="#C4602A" opacity="0.7"/>
+  <circle cx="147" cy="163" r="1.5" fill="#C4602A" opacity="0.7"/>
+</svg>

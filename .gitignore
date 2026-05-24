@@ -1,0 +1,9 @@
+# Dev tool directories — not for deployment
+.claude/
+.claude-flow/
+node_modules/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
