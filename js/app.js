@@ -179,8 +179,14 @@ const App = (() => {
         <!-- Cool dusty rose overlay — pulses via CSS animation -->
         <div class="hero-glow-cool" aria-hidden="true"></div>
 
+        <!-- Aurora layer — slow drifting color bloom -->
+        <div class="hero-aurora" aria-hidden="true"></div>
+
         <!-- Star field (~30 dots via CSS box-shadow) -->
         <div class="hero-stars" aria-hidden="true"></div>
+
+        <!-- Second star layer — twinkling offset -->
+        <div class="hero-stars-2" aria-hidden="true"></div>
 
         <!-- Saguaro cactus silhouettes (inline SVG, 5 cacti) -->
         <svg class="hero-cacti" viewBox="0 0 1440 180" preserveAspectRatio="xMidYMax slice"
