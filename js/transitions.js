@@ -19,7 +19,7 @@ const Transitions = (() => {
       };
       el.addEventListener('animationend', done);
       // Safety timeout in case animationend doesn't fire
-      setTimeout(resolve, 220);
+      setTimeout(resolve, 320);
     });
   }
 
