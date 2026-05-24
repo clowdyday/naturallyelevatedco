@@ -108,6 +108,28 @@ const App = (() => {
       return;
     }
 
+    // Route: FAQ
+    if (path === '/faq') {
+      appEl.innerHTML = renderFAQPage();
+      initFAQPage();
+      Transitions.initScrollReveal();
+      return;
+    }
+
+    // Route: Privacy Policy
+    if (path === '/privacy') {
+      appEl.innerHTML = renderPrivacyPage();
+      Transitions.initScrollReveal();
+      return;
+    }
+
+    // Route: Terms of Service
+    if (path === '/tos') {
+      appEl.innerHTML = renderTOSPage();
+      Transitions.initScrollReveal();
+      return;
+    }
+
     // Fallback — 404-style, redirect home
     appEl.innerHTML = renderHomepage();
     initShopEvents();

@@ -103,6 +103,15 @@ const SEO = (() => {
     } else if (path === '/cart') {
       title       = 'Cart | Naturally Elevated Co.';
       description = 'Review your cart and checkout at Naturally Elevated Co.';
+    } else if (path === '/faq') {
+      title       = 'FAQ | Naturally Elevated Co.';
+      description = 'Answers to common questions about orders, shipping, sizing, returns, and our New Mexico-inspired apparel.';
+    } else if (path === '/privacy') {
+      title       = 'Privacy Policy | Naturally Elevated Co.';
+      description = 'How Naturally Elevated Co. collects, uses, and protects your personal information.';
+    } else if (path === '/tos') {
+      title       = 'Terms of Service | Naturally Elevated Co.';
+      description = 'Terms and conditions for purchasing from Naturally Elevated Co.';
     }
 
     // Apply all tags
