@@ -25,7 +25,7 @@ function renderFAQPage() {
         },
         {
           q: 'Can I cancel or change my order?',
-          a: 'Reach out within 24 hours at hello@naturallyelevatedco.com. After that, your tee is likely already in production and we can\'t make changes.'
+          a: 'Reach out within 24 hours at hello@naturallyelevated.co. After that, your tee is likely already in production and we can\'t make changes.'
         }
       ]
     },
@@ -35,7 +35,7 @@ function renderFAQPage() {
       items: [
         {
           q: 'What sizes are available?',
-          a: 'Every design comes in S, M, L, XL, 2XL, and 3XL. Check the size chart on each product page for exact measurements.'
+          a: 'Every design comes in S, M, L, XL, 2XL, and 3XL. We recommend sizing up for an oversized fit — standard US sizing applies.'
         },
         {
           q: 'What are the shirts made of?',
@@ -61,7 +61,7 @@ function renderFAQPage() {
         },
         {
           q: 'What if my shirt arrives damaged or with a print defect?',
-          a: 'That\'s on us — we\'ll replace it free of charge. Email hello@naturallyelevatedco.com with a photo of the issue and your order number, and we\'ll sort it out within 48 hours.'
+          a: 'That\'s on us — we\'ll replace it free of charge. Email hello@naturallyelevated.co with a photo of the issue and your order number, and we\'ll sort it out within 48 hours.'
         }
       ]
     }
@@ -103,10 +103,10 @@ function renderFAQPage() {
           '<span class="breadcrumb-current" aria-current="page">FAQ</span>' +
         '</nav>' +
         '<header class="policy-header reveal">' +
-          '<p class="section-label">// Frequently Asked</p>' +
+          '<p class="section-label">FAQ</p>' +
           '<h1 class="policy-title">Questions &amp; Answers</h1>' +
           '<p class="policy-subtitle">Can\'t find your answer? Email us at ' +
-            '<a href="mailto:hello@naturallyelevatedco.com" class="policy-link">hello@naturallyelevatedco.com</a>' +
+            '<a href="mailto:hello@naturallyelevated.co" class="policy-link">hello@naturallyelevated.co</a>' +
           '</p>' +
         '</header>' +
         '<div class="zia-rule reveal" aria-hidden="true">' +
@@ -115,6 +115,10 @@ function renderFAQPage() {
           '<div class="zia-rule-line"></div>' +
         '</div>' +
         sectionsHTML +
+        '<div class="faq-cta reveal">' +
+          '<p class="faq-cta-text">Ready to find your vibe?</p>' +
+          '<a href="/shop" class="btn-primary" data-route>SHOP THE COLLECTION</a>' +
+        '</div>' +
       '</div>' +
     '</div>'
   );
@@ -145,7 +149,7 @@ function renderPrivacyPage() {
           '<span class="breadcrumb-current" aria-current="page">Privacy Policy</span>' +
         '</nav>' +
         '<header class="policy-header reveal">' +
-          '<p class="section-label">// Legal</p>' +
+          '<p class="section-label">PRIVACY POLICY</p>' +
           '<h1 class="policy-title">Privacy Policy</h1>' +
           '<p class="policy-meta">Last updated: May 24, 2026</p>' +
         '</header>' +
@@ -176,10 +180,10 @@ function renderPrivacyPage() {
           '<p>Order data is retained for a minimum of 3 years to comply with accounting and tax obligations. You may request deletion of your personal data (except where legally required to retain it) by emailing us.</p>' +
 
           '<h2 class="policy-section-heading">Your Rights</h2>' +
-          '<p>You have the right to access, correct, or delete personal data we hold about you. To exercise these rights, contact us at <a href="mailto:hello@naturallyelevatedco.com" class="policy-link">hello@naturallyelevatedco.com</a>.</p>' +
+          '<p>You have the right to access, correct, or delete personal data we hold about you. To exercise these rights, contact us at <a href="mailto:hello@naturallyelevated.co" class="policy-link">hello@naturallyelevated.co</a>.</p>' +
 
           '<h2 class="policy-section-heading">Contact</h2>' +
-          '<p>Questions about this policy? Reach us at <a href="mailto:hello@naturallyelevatedco.com" class="policy-link">hello@naturallyelevatedco.com</a>.</p>' +
+          '<p>Questions about this policy? Reach us at <a href="mailto:hello@naturallyelevated.co" class="policy-link">hello@naturallyelevated.co</a>.</p>' +
 
         '</div>' +
       '</div>' +
@@ -198,7 +202,7 @@ function renderTOSPage() {
           '<span class="breadcrumb-current" aria-current="page">Terms of Service</span>' +
         '</nav>' +
         '<header class="policy-header reveal">' +
-          '<p class="section-label">// Legal</p>' +
+          '<p class="section-label">TERMS OF SERVICE</p>' +
           '<h1 class="policy-title">Terms of Service</h1>' +
           '<p class="policy-meta">Last updated: May 24, 2026</p>' +
         '</header>' +
@@ -210,18 +214,18 @@ function renderTOSPage() {
         '<div class="policy-body reveal">' +
 
           '<h2 class="policy-section-heading">Acceptance of Terms</h2>' +
-          '<p>By accessing and using naturallyelevatedco.com, you agree to these Terms of Service. If you do not agree, please do not use this site.</p>' +
+          '<p>By accessing and using naturallyelevated.co, you agree to these Terms of Service. If you do not agree, please do not use this site.</p>' +
 
           '<h2 class="policy-section-heading">Products &amp; Orders</h2>' +
           '<p>All products are printed on demand specifically for you. We reserve the right to refuse or cancel any order for any reason, including suspected fraud or errors in product listings.</p>' +
           '<p><strong>Color disclaimer:</strong> Screen colors may differ slightly from the printed result due to monitor calibration and the nature of the printing process. These variations are not considered defects.</p>' +
-          '<p><strong>Sizing:</strong> We provide size charts on each product page. Please review them before ordering — we cannot exchange items due to incorrect size selections beyond our standard exchange window.</p>' +
+          '<p><strong>Sizing:</strong> We recommend sizing up for an oversized fit. Standard US sizing applies. We cannot exchange items due to incorrect size selections beyond our standard exchange window.</p>' +
 
           '<h2 class="policy-section-heading">Shipping</h2>' +
           '<p>Estimated delivery times are not guaranteed. We are not responsible for delays caused by carriers, customs, or circumstances beyond our control. Risk of loss passes to you upon delivery to the carrier.</p>' +
 
           '<h2 class="policy-section-heading">Returns &amp; Exchanges</h2>' +
-          '<p>We accept exchanges within 14 days of delivery for unworn, unwashed items in their original condition. Contact us at <a href="mailto:hello@naturallyelevatedco.com" class="policy-link">hello@naturallyelevatedco.com</a> before sending anything back.</p>' +
+          '<p>We accept exchanges within 14 days of delivery for unworn, unwashed items in their original condition. Contact us at <a href="mailto:hello@naturallyelevated.co" class="policy-link">hello@naturallyelevated.co</a> before sending anything back.</p>' +
           '<p>We do not offer cash refunds for change-of-mind purchases. Defective or damaged items will be replaced at no cost — please photograph and email us within 7 days of delivery.</p>' +
 
           '<h2 class="policy-section-heading">Intellectual Property</h2>' +
@@ -234,10 +238,82 @@ function renderTOSPage() {
           '<p>We may update these terms at any time. Continued use of the site after changes constitutes acceptance. The “Last updated” date at the top of this page reflects the most recent revision.</p>' +
 
           '<h2 class="policy-section-heading">Contact</h2>' +
-          '<p>Questions? <a href="mailto:hello@naturallyelevatedco.com" class="policy-link">hello@naturallyelevatedco.com</a></p>' +
+          '<p>Questions? <a href="mailto:hello@naturallyelevated.co" class="policy-link">hello@naturallyelevated.co</a></p>' +
 
         '</div>' +
       '</div>' +
     '</div>'
   );
+}
+
+/** ── Contact ─────────────────────────────────────────────────────── */
+function renderContactPage() {
+  return (
+    '<div class="policy-page contact-page">' +
+      '<div class="policy-inner">' +
+        '<nav class="breadcrumb" aria-label="Breadcrumb">' +
+          '<a href="/" data-route>Home</a>' +
+          '<span class="breadcrumb-sep" aria-hidden="true">›</span>' +
+          '<span class="breadcrumb-current" aria-current="page">Contact</span>' +
+        '</nav>' +
+        '<header class="policy-header reveal">' +
+          '<p class="section-label">CONTACT</p>' +
+          '<h1 class="policy-title">Get in Touch</h1>' +
+          '<p class="policy-subtitle">Reach us at ' +
+            '<a href="mailto:hello@naturallyelevated.co" class="policy-link">hello@naturallyelevated.co</a>' +
+          '</p>' +
+        '</header>' +
+        '<div class="zia-rule reveal" aria-hidden="true">' +
+          '<div class="zia-rule-line"></div>' +
+          '<span class="zia-rule-symbol">✦</span>' +
+          '<div class="zia-rule-line"></div>' +
+        '</div>' +
+        '<div class="contact-body reveal">' +
+          '<form class="contact-form" id="contact-form" novalidate>' +
+            '<div class="contact-field">' +
+              '<label for="contact-name" class="contact-label">Name</label>' +
+              '<input type="text" id="contact-name" class="contact-input" placeholder="Your name" autocomplete="name" required>' +
+            '</div>' +
+            '<div class="contact-field">' +
+              '<label for="contact-email" class="contact-label">Email</label>' +
+              '<input type="email" id="contact-email" class="contact-input" placeholder="your@email.com" autocomplete="email" required>' +
+            '</div>' +
+            '<div class="contact-field">' +
+              '<label for="contact-message" class="contact-label">Message</label>' +
+              '<textarea id="contact-message" class="contact-input contact-textarea" placeholder="What\'s on your mind?" rows="5" required></textarea>' +
+            '</div>' +
+            '<p class="contact-error" id="contact-error" hidden>Please fill out all fields with a valid email address.</p>' +
+            '<button type="submit" class="btn-primary">SEND MESSAGE</button>' +
+          '</form>' +
+          '<div class="contact-success" id="contact-success" hidden>' +
+            '<span class="contact-success-icon" aria-hidden="true">✓</span>' +
+            '<p>Message received. We\'ll get back to you within 48 hours.</p>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>'
+  );
+}
+
+/** Wire contact form — call after renderContactPage() HTML is in the DOM */
+function initContactPage() {
+  var form      = document.getElementById('contact-form');
+  var errorEl   = document.getElementById('contact-error');
+  var successEl = document.getElementById('contact-success');
+  if (!form) return;
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var name    = (document.getElementById('contact-name')    || {}).value || '';
+    var email   = (document.getElementById('contact-email')   || {}).value || '';
+    var message = (document.getElementById('contact-message') || {}).value || '';
+
+    if (!name.trim() || !email.trim().includes('@') || !message.trim()) {
+      if (errorEl) errorEl.hidden = false;
+      return;
+    }
+    if (errorEl)   errorEl.hidden   = true;
+    form.hidden = true;
+    if (successEl) successEl.hidden = false;
+  });
 }

@@ -9,8 +9,9 @@
  */
 
 /**
- * Renders the "FEATURED DROPS" horizontal scroll strip.
- * Shows only products where featured === true.
+ * Renders the "FEATURED DROPS" section.
+ * Desktop: horizontal scroll carousel with arrow + dot navigation.
+ * Mobile (≤768px): 2-column CSS grid, no scroll.
  * @returns {string} HTML string
  */
 function renderFeaturedStrip() {
@@ -18,7 +19,7 @@ function renderFeaturedStrip() {
 
   const cards = featured.map((product, index) => `
     <article class="featured-card reveal" data-product-id="${product.id}">
-      <a href="/product/${product.id}" class="featured-card-img-link" data-route>
+      <a href="/product/${product.id}" class="featured-card-img-link" data-route aria-label="View ${product.title}">
         <div class="featured-card-img-wrap">
           ${index === 0 ? '<span class="featured-card-badge">Featured Drop</span>' : ''}
           <img
@@ -26,8 +27,8 @@ function renderFeaturedStrip() {
             alt="${product.images[0].alt}"
             class="featured-card-img"
             loading="lazy"
-            width="280"
-            height="420"
+            width="310"
+            height="413"
           >
         </div>
       </a>
@@ -36,9 +37,18 @@ function renderFeaturedStrip() {
           ${product.title}
         </a>
         <span class="featured-card-price">$${product.price}</span>
-        <a href="/product/${product.id}" class="featured-card-view" data-route aria-label="View ${product.title}">
-          VIEW →
-        </a>
+        <div class="featured-card-actions">
+          <a href="/product/${product.id}" class="featured-card-shop-btn" data-route>
+            VIEW PRODUCT →
+          </a>
+          <button
+            class="featured-card-add-btn"
+            data-product-id="${product.id}"
+            data-color="${product.colors[0] || ''}"
+            data-size="M"
+            aria-label="Add ${product.title} to cart"
+          >ADD TO CART</button>
+        </div>
       </div>
     </article>
   `).join('');
@@ -46,10 +56,28 @@ function renderFeaturedStrip() {
   return `
     <section class="featured-section" aria-labelledby="featured-heading">
       <div class="section-container">
-        <p class="section-label" id="featured-heading">// FEATURED DROPS</p>
-        <div class="featured-strip" role="list" aria-label="Featured products">
-          ${cards}
+        <div class="featured-header">
+          <p class="section-label" id="featured-heading">FEATURED DROPS</p>
+          <a href="/shop" class="featured-view-all" data-route data-filter="featured">VIEW ALL →</a>
         </div>
+        <div class="featured-carousel-wrap">
+          <button class="featured-arrow featured-arrow--prev" aria-label="Previous" hidden>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+          </button>
+          <div class="featured-strip" role="list" aria-label="Featured products">
+            ${cards}
+          </div>
+          <button class="featured-arrow featured-arrow--next" aria-label="Next">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </button>
+        </div>
+        <div class="featured-pagination" id="featured-dots" aria-hidden="true"></div>
       </div>
     </section>
   `;
@@ -60,58 +88,54 @@ function renderFeaturedStrip() {
  * @returns {string} HTML string
  */
 function renderShopGrid() {
-  const cards = PRODUCTS.map(product => {
+  const cards = PRODUCTS.map((product, i) => {
     const colorSwatches = product.colors.map(color => {
       const hex = COLOR_HEX[color] || '#888';
       return `<span class="mini-swatch" style="background:${hex}" title="${color}" aria-label="${color}"></span>`;
     }).join('');
+    const num = String(i + 1).padStart(2, '0');
+    const featuredTag = product.featured ? `<span class="product-card-tag product-card-tag--featured">Featured</span>` : '';
 
     return `
       <article class="product-card reveal" data-product-id="${product.id}">
         <a href="/product/${product.id}" class="product-card-img-link" data-route aria-label="View ${product.title}">
           <div class="product-card-img-wrap">
+            <span class="product-card-num" aria-hidden="true">${num}</span>
             <img
               src="${product.images[0].url}"
               alt="${product.images[0].alt}"
               class="product-card-img"
               loading="lazy"
               width="400"
-              height="400"
+              height="500"
             >
             <div class="product-card-hover-overlay" aria-hidden="true">
+              <span class="product-card-overlay-title">${product.title}</span>
               <button
                 class="btn-card-add"
                 data-product-id="${product.id}"
                 data-color="${product.colors[0]}"
                 data-size="M"
                 tabindex="-1"
-              >
-                ADD TO CART
-              </button>
+              >ADD TO CART</button>
             </div>
           </div>
         </a>
         <div class="product-card-body">
-          <a href="/product/${product.id}" class="product-card-title" data-route>
-            ${product.title}
-          </a>
+          <a href="/product/${product.id}" class="product-card-title" data-route>${product.title}</a>
+          ${featuredTag ? `<div class="product-card-tags">${featuredTag}</div>` : ''}
           <div class="product-card-meta">
             <span class="product-card-price">$${product.price}</span>
-            <div class="product-card-colors" aria-label="Available colors">
-              ${colorSwatches}
-            </div>
+            <div class="product-card-colors" aria-label="Available colors">${colorSwatches}</div>
           </div>
         </div>
-        <!-- Accessible add-to-cart below image for keyboard/screen reader users -->
         <button
           class="btn-card-add btn-card-add-accessible"
           data-product-id="${product.id}"
           data-color="${product.colors[0]}"
           data-size="M"
           aria-label="Add ${product.title} to cart (${product.colors[0]}, size M)"
-        >
-          ADD TO CART
-        </button>
+        >ADD TO CART</button>
       </article>
     `;
   }).join('');
@@ -129,52 +153,135 @@ function renderShopGrid() {
 }
 
 /**
- * Attaches event listeners to the shop grid after it's been rendered to DOM.
- * Must be called after renderShopGrid() HTML is injected into the page.
+ * Attaches event listeners for the homepage featured strip.
+ * Also sets up the product grid listener if a grid exists on the page.
+ * Must be called after renderHomepage() HTML is in the DOM.
  */
 function initShopEvents() {
-  // Event delegation on the product grid
+  // ── Product grid (homepage or any page that includes one) ──────
   const grid = document.querySelector('.product-grid');
-  if (!grid) return;
+  if (grid) {
+    grid.addEventListener('click', e => {
+      const addBtn = e.target.closest('.btn-card-add');
+      if (!addBtn) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const rawPid = addBtn.dataset.productId;
+      const productId = /^\d+$/.test(rawPid) ? parseInt(rawPid, 10) : rawPid;
+      const color = addBtn.dataset.color;
+      const size  = addBtn.dataset.size || 'M';
+      CartState.addToCart(productId, color, size, 1);
+      const card = addBtn.closest('.product-card');
+      if (card) {
+        card.classList.add('adding');
+        addBtn.textContent = 'ADDED ✓';
+        setTimeout(() => { card.classList.remove('adding'); addBtn.textContent = 'ADD TO CART'; }, 1500);
+      }
+    });
+  }
 
-  grid.addEventListener('click', e => {
-    const addBtn = e.target.closest('.btn-card-add');
-    if (!addBtn) return;
-
-    e.preventDefault();
-    e.stopPropagation();
-
-    const productId = parseInt(addBtn.dataset.productId, 10);
-    const color = addBtn.dataset.color;
-    const size = addBtn.dataset.size || 'M';
-
-    CartState.addToCart(productId, color, size, 1);
-
-    // Flash confirmation on the card
-    const card = addBtn.closest('.product-card');
-    if (card) {
-      card.classList.add('adding');
-      addBtn.textContent = 'ADDED ✓';
-      setTimeout(() => {
-        card.classList.remove('adding');
-        addBtn.textContent = 'ADD TO CART';
-      }, 1500);
-    }
-  });
-
-  // Event delegation for featured strip clicks
+  // ── Featured strip ─────────────────────────────────────────────
   const strip = document.querySelector('.featured-strip');
   if (!strip) return;
 
+  // Add-to-cart from featured cards
   strip.addEventListener('click', e => {
-    const addBtn = e.target.closest('.btn-card-add');
+    const addBtn = e.target.closest('.featured-card-add-btn');
     if (!addBtn) return;
-
     e.preventDefault();
-    const productId = parseInt(addBtn.dataset.productId, 10);
+    e.stopPropagation();
+    const rawPid = addBtn.dataset.productId;
+    const productId = /^\d+$/.test(rawPid) ? parseInt(rawPid, 10) : rawPid;
     const color = addBtn.dataset.color;
     CartState.addToCart(productId, color, 'M', 1);
+    const orig = addBtn.textContent;
+    addBtn.textContent = 'ADDED ✓';
+    addBtn.disabled = true;
+    setTimeout(() => { addBtn.textContent = orig; addBtn.disabled = false; }, 1500);
   });
+
+  // Carousel navigation (desktop) — dots + arrows
+  _initFeaturedCarousel(strip);
+}
+
+/**
+ * Sets up arrow buttons and pagination dots for the featured carousel.
+ * On mobile the strip is a CSS grid, arrows/dots are CSS-hidden — JS is a no-op.
+ * @param {HTMLElement} strip - the .featured-strip element
+ */
+function _initFeaturedCarousel(strip) {
+  const prevBtn = document.querySelector('.featured-arrow--prev');
+  const nextBtn = document.querySelector('.featured-arrow--next');
+  const dotsContainer = document.getElementById('featured-dots');
+  const cards = [...strip.querySelectorAll('.featured-card')];
+
+  if (!cards.length) return;
+
+  // Build dot indicators
+  const buildDots = () => {
+    if (!dotsContainer) return;
+    const cardW = (cards[0].offsetWidth || 310) + 20; // card + gap
+    const visibleCount = Math.max(1, Math.floor(strip.offsetWidth / cardW));
+    const dotCount = Math.max(1, cards.length - visibleCount + 1);
+    dotsContainer.innerHTML = '';
+    for (let i = 0; i < dotCount; i++) {
+      const dot = document.createElement('button');
+      dot.className = 'featured-dot' + (i === 0 ? ' is-active' : '');
+      dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+      dotsContainer.appendChild(dot);
+      dot.addEventListener('click', () => {
+        const cw = (cards[0].offsetWidth || 310) + 20;
+        strip.scrollTo({ left: i * cw, behavior: 'smooth' });
+      });
+    }
+  };
+  buildDots();
+
+  // Sync arrows + dots to current scroll position
+  const updateState = () => {
+    const scrollLeft = strip.scrollLeft;
+    const maxScroll = strip.scrollWidth - strip.offsetWidth;
+    if (prevBtn) prevBtn.hidden = scrollLeft <= 2;
+    if (nextBtn) nextBtn.hidden = maxScroll <= 2 || scrollLeft >= maxScroll - 2;
+
+    if (dotsContainer && dotsContainer.children.length) {
+      const cardW = (cards[0].offsetWidth || 310) + 20;
+      const active = Math.min(
+        dotsContainer.children.length - 1,
+        Math.round(scrollLeft / cardW)
+      );
+      [...dotsContainer.querySelectorAll('.featured-dot')].forEach((dot, i) => {
+        dot.classList.toggle('is-active', i === active);
+      });
+    }
+  };
+
+  strip.addEventListener('scroll', updateState, { passive: true });
+  updateState();
+
+  // Mark image wraps as loaded so shimmer hides
+  strip.querySelectorAll('.featured-card-img-wrap').forEach(wrap => {
+    const img = wrap.querySelector('img');
+    if (!img) return;
+    if (img.complete) { wrap.classList.add('loaded'); }
+    else {
+      img.addEventListener('load',  () => wrap.classList.add('loaded'), { once: true });
+      img.addEventListener('error', () => wrap.classList.add('loaded'), { once: true });
+    }
+  });
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      const cw = (cards[0].offsetWidth || 310) + 20;
+      strip.scrollBy({ left: -cw, behavior: 'smooth' });
+    });
+  }
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      const cw = (cards[0].offsetWidth || 310) + 20;
+      strip.scrollBy({ left: cw, behavior: 'smooth' });
+    });
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -184,7 +291,7 @@ function initShopEvents() {
 /** Persistent filter/sort state — survives between navigations */
 const shopState = {
   search: '',
-  sort: 'default',   // 'default' | 'featured' | 'price-asc' | 'price-desc' | 'name-asc' | 'name-desc'
+  sort: 'default',   // 'default' | 'newest' | 'featured' | 'price-asc' | 'price-desc' | 'name-asc' | 'name-desc'
   sizes: [],         // active size filters (empty = all)
   colors: [],        // active color filters (empty = all)
   showFeatured: false
@@ -219,6 +326,7 @@ function getFilteredSorted() {
   }
 
   switch (shopState.sort) {
+    case 'newest':     items.reverse(); break;
     case 'price-asc':  items.sort((a, b) => a.price - b.price); break;
     case 'price-desc': items.sort((a, b) => b.price - a.price); break;
     case 'name-asc':   items.sort((a, b) => a.title.localeCompare(b.title)); break;
@@ -252,17 +360,20 @@ function _renderProductCards(items) {
         <small>Try clearing a filter above.</small>
       </div>`;
   }
-  return items.map(product => {
+  return items.map((product) => {
     const swatches = product.colors.map(color =>
       `<span class="mini-swatch" style="background:${COLOR_HEX[color] || '#888'}" title="${color}" aria-label="${color}"></span>`
     ).join('');
+    const featuredBadge = product.featured ? `<span class="product-card-tag product-card-tag--featured">Featured</span>` : '';
     return `
       <article class="product-card reveal" data-product-id="${product.id}">
         <a href="/product/${product.id}" class="product-card-img-link" data-route aria-label="View ${product.title}">
           <div class="product-card-img-wrap">
+            ${featuredBadge}
             <img src="${product.images[0].url}" alt="${product.images[0].alt}"
-              class="product-card-img" loading="lazy" width="400" height="400">
+              class="product-card-img" loading="lazy" width="400" height="500">
             <div class="product-card-hover-overlay" aria-hidden="true">
+              <span class="product-card-overlay-title">${product.title}</span>
               <button class="btn-card-add" data-product-id="${product.id}"
                 data-color="${product.colors[0]}" data-size="M" tabindex="-1">ADD TO CART</button>
             </div>
@@ -317,6 +428,7 @@ function renderShopPage() {
 
   const SORT_LABELS = {
     'default':    'Default',
+    'newest':     'Newest',
     'featured':   'Featured First',
     'price-asc':  'Price: Low — High',
     'price-desc': 'Price: High — Low',
@@ -340,10 +452,15 @@ function renderShopPage() {
   return `
     <div class="shop-page">
 
-      <!-- ── Top controls bar ── -->
+      <!-- ── Compact shop header ── -->
       <div class="shop-page-header">
-        <p class="shop-page-title">// ALL ITEMS</p>
-        <div class="shop-controls-bar">
+        <div class="shop-header-row">
+          <div class="shop-header-left">
+            <h1 class="shop-title">THE COLLECTION</h1>
+            <p class="shop-results-count" id="shop-results-count" aria-live="polite">
+              ${items.length} of ${PRODUCTS.length} products
+            </p>
+          </div>
           <div class="shop-search-wrap">
             <span class="shop-search-icon" aria-hidden="true">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -352,13 +469,10 @@ function renderShopPage() {
                 <line x1="21" y1="21" x2="16.65" y2="16.65"/>
               </svg>
             </span>
-            <input type="search" id="shop-search-input" class="shop-search-input"
+            <input type="search" id="shop-search-input" class="shop-search-input shop-search"
               placeholder="Search products..." value="${shopState.search}"
               autocomplete="off" aria-label="Search products">
           </div>
-          <span id="shop-results-count" class="shop-results-count" aria-live="polite">
-            ${items.length} of ${PRODUCTS.length} products
-          </span>
         </div>
         <div id="shop-filter-chips" class="filter-chips" aria-label="Active filters">
           ${_renderFilterChips()}
@@ -492,7 +606,8 @@ function initShopPage() {
       if (!addBtn) return;
       e.preventDefault();
       e.stopPropagation();
-      const productId = parseInt(addBtn.dataset.productId, 10);
+      const rawPid = addBtn.dataset.productId;
+      const productId = /^\d+$/.test(rawPid) ? parseInt(rawPid, 10) : rawPid;
       CartState.addToCart(productId, addBtn.dataset.color, addBtn.dataset.size || 'M', 1);
       const card = addBtn.closest('.product-card');
       if (card) {

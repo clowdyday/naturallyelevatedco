@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://naturallyelevatedco.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority><lastmod>2026-05-24</lastmod></url>
-  <url><loc>https://naturallyelevatedco.com/shop</loc><changefreq>weekly</changefreq><priority>0.9</priority><lastmod>2026-05-24</lastmod></url>
-  <url><loc>https://naturallyelevatedco.com/product/1</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-05-24</lastmod></url>
-  <url><loc>https://naturallyelevatedco.com/product/2</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-05-24</lastmod></url>
-  <url><loc>https://naturallyelevatedco.com/product/3</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-05-24</lastmod></url>
-  <url><loc>https://naturallyelevatedco.com/product/4</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-05-24</lastmod></url>
-  <url><loc>https://naturallyelevatedco.com/product/5</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-05-24</lastmod></url>
-  <url><loc>https://naturallyelevatedco.com/product/6</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-05-24</lastmod></url>
-  <url><loc>https://naturallyelevatedco.com/product/7</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-05-24</lastmod></url>
-  <url><loc>https://naturallyelevatedco.com/product/8</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-05-24</lastmod></url>
-  <url><loc>https://naturallyelevatedco.com/product/9</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-05-24</lastmod></url>
-  <url><loc>https://naturallyelevatedco.com/product/10</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-05-24</lastmod></url>
-  <url><loc>https://naturallyelevatedco.com/product/11</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-05-24</lastmod></url>
-  <url><loc>https://naturallyelevatedco.com/faq</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>2026-05-24</lastmod></url>
-  <url><loc>https://naturallyelevatedco.com/tos</loc><changefreq>yearly</changefreq><priority>0.3</priority><lastmod>2026-05-24</lastmod></url>
-  <url><loc>https://naturallyelevatedco.com/privacy</loc><changefreq>yearly</changefreq><priority>0.3</priority><lastmod>2026-05-24</lastmod></url>
+  <!-- Core pages -->
+  <url><loc>https://naturallyelevated.co/</loc><changefreq>weekly</changefreq><priority>1.0</priority><lastmod>2026-05-25</lastmod></url>
+  <url><loc>https://naturallyelevated.co/shop</loc><changefreq>weekly</changefreq><priority>0.9</priority><lastmod>2026-05-25</lastmod></url>
+  <url><loc>https://naturallyelevated.co/contact</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>2026-05-25</lastmod></url>
+  <url><loc>https://naturallyelevated.co/faq</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>2026-05-25</lastmod></url>
+  <url><loc>https://naturallyelevated.co/tos</loc><changefreq>yearly</changefreq><priority>0.3</priority><lastmod>2026-05-25</lastmod></url>
+  <url><loc>https://naturallyelevated.co/privacy</loc><changefreq>yearly</changefreq><priority>0.3</priority><lastmod>2026-05-25</lastmod></url>
+  <!-- Products -->
+  <url><loc>https://naturallyelevated.co/product/6a08d78574d5c75c190409e6</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-05-25</lastmod></url>
+  <url><loc>https://naturallyelevated.co/product/6a08d157b7acc2cf2206b880</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-05-25</lastmod></url>
+  <url><loc>https://naturallyelevated.co/product/6a08cf7f4b43cb78f60f27a0</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-05-25</lastmod></url>
+  <url><loc>https://naturallyelevated.co/product/6a08c9e82c5d71edb90f1020</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-05-25</lastmod></url>
+  <url><loc>https://naturallyelevated.co/product/6a05eaf367059491f90663d9</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-05-25</lastmod></url>
+  <url><loc>https://naturallyelevated.co/product/6a05e55b05d63cc97f0583de</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-05-25</lastmod></url>
+  <url><loc>https://naturallyelevated.co/product/6a04b9645540b782e103ca06</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-05-25</lastmod></url>
+  <url><loc>https://naturallyelevated.co/product/6a04b6e1963577f6d9075545</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-05-25</lastmod></url>
+  <url><loc>https://naturallyelevated.co/product/6a04b59fd54e5aa2fa00f786</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-05-25</lastmod></url>
+  <url><loc>https://naturallyelevated.co/product/6a04b2f4963577f6d90752bb</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-05-25</lastmod></url>
+  <url><loc>https://naturallyelevated.co/product/6a04b0d14261b0d2ea07e77e</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-05-25</lastmod></url>
+  <url><loc>https://naturallyelevated.co/product/6a04ae98b14e025c990e8102</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-05-25</lastmod></url>
 </urlset>

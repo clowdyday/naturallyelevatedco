@@ -41,6 +41,12 @@ const Transitions = (() => {
   function initScrollReveal() {
     if (!window.IntersectionObserver) return; // graceful degradation
 
+    // Item 29: respect prefers-reduced-motion — skip observer, make all reveals visible immediately
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
+      return;
+    }
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -145,17 +151,18 @@ const Transitions = (() => {
 
   /**
    * Announcement bar marquee — driven by requestAnimationFrame.
-   * Clones the .announcement-track so the scroll loops seamlessly:
-   *   track  → scrolls left (exits)
-   *   clone  → follows immediately behind (enters)
-   * When offset reaches trackWidth it resets to 0 — invisible because
-   * both elements are at the same position as the start of the cycle.
+   * Uses neutral ID/class names (#site-topbar / .topbar-ticker) to avoid
+   * EasyList cosmetic filters that target "announcement" selectors.
+   * Clones the .topbar-ticker so the scroll loops seamlessly.
    */
   function initAnnouncementBar() {
-    const bar   = document.getElementById('announcement-bar');
+    const bar   = document.getElementById('site-topbar');
     if (!bar) return;
 
-    const track = bar.querySelector('.announcement-track');
+    // Item 30: respect prefers-reduced-motion — keep text static, skip animation
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const track = bar.querySelector('.topbar-ticker');
     if (!track) return;
 
     // Clone for seamless loop
@@ -170,6 +177,10 @@ const Transitions = (() => {
     const SPEED  = 55;   // pixels per second
     let   offset = 0;
     let   lastTs = 0;
+    // Item 30: pause on hover
+    let   paused = false;
+    bar.addEventListener('mouseenter', () => { paused = true; });
+    bar.addEventListener('mouseleave', () => { paused = false; });
 
     function tick(ts) {
       if (!lastTs) lastTs = ts;
@@ -177,15 +188,124 @@ const Transitions = (() => {
       const dt = Math.min((ts - lastTs) / 1000, 0.05);
       lastTs = ts;
 
-      offset = (offset + SPEED * dt) % trackW;
-
-      track.style.transform = `translateX(${-offset}px)`;
-      clone.style.transform  = `translateX(${trackW - offset}px)`;
+      if (!paused) {
+        offset = (offset + SPEED * dt) % trackW;
+        track.style.transform = `translateX(${-offset}px)`;
+        clone.style.transform  = `translateX(${trackW - offset}px)`;
+      }
 
       requestAnimationFrame(tick);
     }
 
     requestAnimationFrame(tick);
+  }
+
+  /**
+   * Animation Guard — detects when a browser extension (ad blocker, "stop animations"
+   * extension, etc.) is suppressing CSS animations/transitions and re-applies critical
+   * ones as inline styles with !important, which always wins over extension-injected
+   * author-level CSS regardless of specificity.
+   *
+   * Two threat models handled:
+   *   1. Cosmetic CSS injection:  * { animation: none !important; transition: none !important; }
+   *   2. EasyList element hiding: #site-topbar { display: none !important; }
+   *      (mitigated by renaming away from "announcement" patterns)
+   */
+  function initAnimGuard() {
+    // ── Step 1: detect if CSS animations are being blocked ────────────
+    const testStyle = document.createElement('style');
+    testStyle.id = '_nec-ags';
+    testStyle.textContent =
+      '._nec-agt{animation:_nec-agk 1s linear!important}' +
+      '@keyframes _nec-agk{to{opacity:0}}';
+    document.head.appendChild(testStyle);
+
+    const testEl = document.createElement('div');
+    testEl.className = '_nec-agt';
+    testEl.setAttribute('aria-hidden', 'true');
+    testEl.style.cssText = 'position:fixed;width:0;height:0;pointer-events:none;';
+    document.body.appendChild(testEl);
+
+    const detectedName = window.getComputedStyle(testEl).animationName;
+    const animsBlocked = !detectedName || detectedName === 'none';
+
+    testEl.remove();
+    testStyle.remove();
+
+    if (!animsBlocked) return; // animations work — nothing to do
+
+    // ── Step 2: compile critical animation + transition overrides ─────
+    // These are the keyframe names defined in style.css
+    const ANIMS = [
+      ['.hero-stars',     'starField 80s linear infinite'],
+      ['.hero-stars-2',   'twinkle 4s ease-in-out infinite alternate'],
+      ['.hero-aurora',    'aurora 12s ease-in-out infinite alternate'],
+      ['.hero-glow-warm', 'warmPulse 8s ease-in-out infinite alternate'],
+      ['.hero-glow-cool', 'coolPulse 10s ease-in-out infinite alternate'],
+      ['.hero-horizon',   'horizonGlow 6s ease-in-out infinite alternate'],
+      ['#site-topbar',    'none'],  // marquee is JS-driven — just ensure visibility
+    ];
+
+    const TRANSITIONS = [
+      ['.featured-card',  'transform 0.28s ease, box-shadow 0.28s ease'],
+      ['.product-card',   'transform 0.28s ease, box-shadow 0.28s ease'],
+      ['.btn-primary',    'background 0.2s ease, transform 0.15s ease'],
+      ['.btn-outline',    'background 0.2s ease, color 0.2s ease'],
+      ['.nav-link',       'color 0.2s ease, letter-spacing 0.2s ease'],
+    ];
+
+    function _applyOverrides() {
+      // Force hero CSS animations
+      ANIMS.forEach(([sel, val]) => {
+        document.querySelectorAll(sel).forEach(el => {
+          el.style.setProperty('animation', val, 'important');
+          el.style.setProperty('animation-play-state', 'running', 'important');
+        });
+      });
+
+      // Force transitions on interactive elements
+      TRANSITIONS.forEach(([sel, val]) => {
+        document.querySelectorAll(sel).forEach(el => {
+          el.style.setProperty('transition', val, 'important');
+        });
+      });
+
+      // .reveal elements: if transitions are blocked they stay opacity:0 forever
+      // Make them immediately visible
+      document.querySelectorAll('.reveal').forEach(el => {
+        el.style.setProperty('opacity', '1', 'important');
+        el.style.setProperty('transform', 'none', 'important');
+        el.style.setProperty('transition', 'none', 'important');
+      });
+
+      // Page-enter/exit: ensure animations run so navigation doesn't hang
+      document.querySelectorAll('.page-enter, .page-exit').forEach(el => {
+        el.style.setProperty('animation-play-state', 'running', 'important');
+      });
+    }
+
+    _applyOverrides();
+
+    // ── Step 3: re-apply when router swaps content into #app ──────────
+    let _debounce;
+    const appEl = document.getElementById('app');
+    if (appEl) {
+      new MutationObserver(() => {
+        clearTimeout(_debounce);
+        _debounce = setTimeout(_applyOverrides, 80);
+      }).observe(appEl, { childList: true });
+    }
+
+    // ── Step 4: re-apply if extension injects a new <style> later ─────
+    new MutationObserver(mutations => {
+      const hasNewStyle = mutations.some(m =>
+        [...m.addedNodes].some(n => n.nodeName === 'STYLE' && n.id !== '_nec-ags')
+      );
+      if (hasNewStyle) setTimeout(_applyOverrides, 20);
+    }).observe(document.head, { childList: true });
+
+    // Mark so CSS can optionally target this state
+    document.documentElement.setAttribute('data-anims-forced', '1');
   }
 
   return {
@@ -196,6 +316,7 @@ const Transitions = (() => {
     initNavShrink,
     initScrollProgress,
     initCursorDot,
-    initAnnouncementBar
+    initAnnouncementBar,
+    initAnimGuard
   };
 })();

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin · Naturally Elevated Co.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#0C0B09; --surface:#141210; --surface2:#1A1714;
+      --border:#2E2822; --text:#EDE8DC; --muted:#7A6A58;
+      --gold:#D4952A; --terra:#C4602A; --green:#3A7A3A;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh}
+
+    /* ── LOGIN ── */
+    #login{display:flex;align-items:center;justify-content:center;min-height:100vh}
+    .login-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:2.5rem 2rem;width:300px;text-align:center}
+    .login-mark{width:52px;height:52px;margin:0 auto 1.25rem}
+    .login-title{font-size:.78rem;font-weight:700;letter-spacing:4px;color:var(--muted);margin-bottom:.2rem}
+    .login-sub{font-size:.7rem;color:var(--muted);margin-bottom:1.5rem;opacity:.7}
+    .login-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Outfit',sans-serif;font-size:.9rem;padding:.65rem 1rem;margin-bottom:.75rem;outline:none;transition:border-color .2s}
+    .login-input:focus{border-color:var(--gold)}
+    .login-btn{width:100%;background:var(--gold);border:none;border-radius:6px;color:#0C0B09;cursor:pointer;font-family:'Outfit',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:2px;padding:.72rem;transition:opacity .2s}
+    .login-btn:hover{opacity:.85}
+    .login-btn:disabled{opacity:.5;cursor:default}
+    .login-err{color:var(--terra);font-size:.75rem;margin-top:.5rem;min-height:1.1em}
+
+    /* ── DASHBOARD ── */
+    #dashboard{display:none}
+    .adm-header{background:var(--surface);border-bottom:1px solid var(--border);padding:.9rem 1.75rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+    .adm-brand{display:flex;align-items:center;gap:.65rem;font-size:.72rem;font-weight:700;letter-spacing:3px;color:var(--muted)}
+    .adm-actions{display:flex;align-items:center;gap:.75rem}
+    .tick{font-size:.7rem;color:var(--muted)}
+    .btn-xs{background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--muted);cursor:pointer;font-family:'Outfit',sans-serif;font-size:.68rem;letter-spacing:1px;padding:.35rem .7rem;transition:border-color .18s,color .18s}
+    .btn-xs:hover{border-color:var(--gold);color:var(--gold)}
+
+    .adm-body{max-width:1080px;margin:0 auto;padding:1.75rem 1.5rem}
+
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.9rem;margin-bottom:2rem}
+    .stat{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.1rem 1.3rem}
+    .stat-lbl{font-size:.62rem;font-weight:700;letter-spacing:2.5px;color:var(--muted);text-transform:uppercase;margin-bottom:.4rem}
+    .stat-val{font-size:1.7rem;font-weight:700}
+    .stat-val.gold{color:var(--gold)}
+    .stat-hint{font-size:.7rem;color:var(--muted);margin-top:.2rem}
+
+    .sec{margin-bottom:2.25rem}
+    .sec-title{font-size:.62rem;font-weight:700;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:.8rem}
+    .tbl-wrap{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;overflow-x:auto}
+    table{width:100%;border-collapse:collapse}
+    th{font-size:.6rem;font-weight:700;letter-spacing:2px;color:var(--muted);text-align:left;padding:.7rem 1rem;border-bottom:1px solid var(--border)}
+    td{font-size:.8rem;padding:.7rem 1rem;border-bottom:1px solid var(--border);color:var(--text)}
+    tr:last-child td{border-bottom:none}
+    tr:hover td{background:var(--surface2)}
+    .amt{font-weight:600;color:var(--gold)}
+    .dim{color:var(--muted)}
+    .empty-row td{text-align:center;padding:2rem;color:var(--muted);font-size:.82rem}
+
+    .badge{display:inline-block;border-radius:20px;font-size:.6rem;font-weight:700;letter-spacing:.5px;padding:.18rem .55rem;text-transform:uppercase}
+    .b-green{background:rgba(58,122,58,.12);color:#6acf6a;border:1px solid rgba(58,122,58,.25)}
+    .b-gold{background:rgba(212,149,42,.12);color:var(--gold);border:1px solid rgba(212,149,42,.25)}
+    .b-muted{background:rgba(122,106,88,.12);color:var(--muted);border:1px solid rgba(122,106,88,.18)}
+    .b-red{background:rgba(196,96,42,.12);color:var(--terra);border:1px solid rgba(196,96,42,.25)}
+
+    .spinner{text-align:center;padding:3.5rem;color:var(--muted)}
+    .dots{display:inline-flex;gap:5px}
+    .dots span{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:dp 1.2s ease-in-out infinite}
+    .dots span:nth-child(2){animation-delay:.2s}
+    .dots span:nth-child(3){animation-delay:.4s}
+    @keyframes dp{0%,80%,100%{opacity:.25;transform:scale(.75)}40%{opacity:1;transform:scale(1)}}
+
+    @media(max-width:600px){
+      .adm-header{padding:.7rem 1rem}
+      .adm-body{padding:1rem}
+      .stat-val{font-size:1.35rem}
+      th,td{padding:.55rem .75rem;font-size:.75rem}
+      .tick{display:none}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div id="login">
+  <div class="login-card">
+    <svg class="login-mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="50" cy="50" r="50" fill="#141210"/>
+      <g fill="#D4952A"><rect x="45.5" y="10" width="3" height="10" rx="1.5"/><rect x="48.5" y="7.5" width="3.5" height="12" rx="1.75"/><rect x="52" y="7.5" width="3.5" height="12" rx="1.75"/><rect x="55.5" y="10" width="3" height="10" rx="1.5"/></g>
+      <g fill="#D4952A" transform="rotate(180 50 50)"><rect x="45.5" y="10" width="3" height="10" rx="1.5"/><rect x="48.5" y="7.5" width="3.5" height="12" rx="1.75"/><rect x="52" y="7.5" width="3.5" height="12" rx="1.75"/><rect x="55.5" y="10" width="3" height="10" rx="1.5"/></g>
+      <g fill="#D4952A" transform="rotate(90 50 50)"><rect x="45.5" y="10" width="3" height="10" rx="1.5"/><rect x="48.5" y="7.5" width="3.5" height="12" rx="1.75"/><rect x="52" y="7.5" width="3.5" height="12" rx="1.75"/><rect x="55.5" y="10" width="3" height="10" rx="1.5"/></g>
+      <g fill="#D4952A" transform="rotate(270 50 50)"><rect x="45.5" y="10" width="3" height="10" rx="1.5"/><rect x="48.5" y="7.5" width="3.5" height="12" rx="1.75"/><rect x="52" y="7.5" width="3.5" height="12" rx="1.75"/><rect x="55.5" y="10" width="3" height="10" rx="1.5"/></g>
+      <circle cx="50" cy="50" r="16" fill="#D4952A"/>
+      <rect x="46.5" y="26" width="7" height="30" rx="3.5" fill="#C4602A"/>
+      <rect x="33" y="36" width="13.5" height="6" rx="3" fill="#C4602A"/>
+      <rect x="33" y="26" width="6" height="16" rx="3" fill="#C4602A"/>
+      <rect x="53.5" y="36" width="13.5" height="6" rx="3" fill="#C4602A"/>
+      <rect x="61" y="26" width="6" height="16" rx="3" fill="#C4602A"/>
+    </svg>
+    <p class="login-title">ADMIN</p>
+    <p class="login-sub">Naturally Elevated Co.</p>
+    <input type="password" id="pwd" class="login-input" placeholder="Password" autocomplete="current-password">
+    <button class="login-btn" id="login-btn">SIGN IN</button>
+    <p class="login-err" id="login-err"></p>
+  </div>
+</div>
+
+<!-- ── DASHBOARD ── -->
+<div id="dashboard">
+  <header class="adm-header">
+    <div class="adm-brand">
+      <svg width="28" height="28" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="50" cy="50" r="50" fill="#141210"/>
+        <g fill="#D4952A"><rect x="45.5" y="10" width="3" height="10" rx="1.5"/><rect x="48.5" y="7.5" width="3.5" height="12" rx="1.75"/><rect x="52" y="7.5" width="3.5" height="12" rx="1.75"/><rect x="55.5" y="10" width="3" height="10" rx="1.5"/></g>
+        <g fill="#D4952A" transform="rotate(180 50 50)"><rect x="45.5" y="10" width="3" height="10" rx="1.5"/><rect x="48.5" y="7.5" width="3.5" height="12" rx="1.75"/><rect x="52" y="7.5" width="3.5" height="12" rx="1.75"/><rect x="55.5" y="10" width="3" height="10" rx="1.5"/></g>
+        <g fill="#D4952A" transform="rotate(90 50 50)"><rect x="45.5" y="10" width="3" height="10" rx="1.5"/><rect x="48.5" y="7.5" width="3.5" height="12" rx="1.75"/><rect x="52" y="7.5" width="3.5" height="12" rx="1.75"/><rect x="55.5" y="10" width="3" height="10" rx="1.5"/></g>
+        <g fill="#D4952A" transform="rotate(270 50 50)"><rect x="45.5" y="10" width="3" height="10" rx="1.5"/><rect x="48.5" y="7.5" width="3.5" height="12" rx="1.75"/><rect x="52" y="7.5" width="3.5" height="12" rx="1.75"/><rect x="55.5" y="10" width="3" height="10" rx="1.5"/></g>
+        <circle cx="50" cy="50" r="16" fill="#D4952A"/>
+        <rect x="46.5" y="26" width="7" height="30" rx="3.5" fill="#C4602A"/>
+        <rect x="33" y="36" width="13.5" height="6" rx="3" fill="#C4602A"/>
+        <rect x="33" y="26" width="6" height="16" rx="3" fill="#C4602A"/>
+        <rect x="53.5" y="36" width="13.5" height="6" rx="3" fill="#C4602A"/>
+        <rect x="61" y="26" width="6" height="16" rx="3" fill="#C4602A"/>
+      </svg>
+      ADMIN
+    </div>
+    <div class="adm-actions">
+      <span class="tick" id="tick">Refreshing in 60s</span>
+      <button class="btn-xs" id="refresh-btn">↻ REFRESH</button>
+      <button class="btn-xs" id="logout-btn">SIGN OUT</button>
+    </div>
+  </header>
+
+  <div class="adm-body">
+    <div id="spinner" class="spinner"><div class="dots"><span></span><span></span><span></span></div></div>
+    <div id="content" style="display:none">
+
+      <div class="stats-grid">
+        <div class="stat"><div class="stat-lbl">Revenue Today</div><div class="stat-val gold" id="s-today">—</div></div>
+        <div class="stat"><div class="stat-lbl">Revenue (30 Days)</div><div class="stat-val gold" id="s-month">—</div></div>
+        <div class="stat"><div class="stat-lbl">All-Time Revenue</div><div class="stat-val gold" id="s-total">—</div></div>
+        <div class="stat"><div class="stat-lbl">Orders (30 Days)</div><div class="stat-val" id="s-orders">—</div></div>
+        <div class="stat"><div class="stat-lbl">Stripe Balance</div><div class="stat-val" id="s-avail">—</div><div class="stat-hint" id="s-pend">—</div></div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">Recent Stripe Orders</div>
+        <div class="tbl-wrap">
+          <table><thead><tr><th>ORDER</th><th>CUSTOMER</th><th>ITEMS</th><th>AMOUNT</th><th>DATE</th></tr></thead>
+          <tbody id="t-orders"></tbody></table>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">Printify Fulfillment</div>
+        <div class="tbl-wrap">
+          <table><thead><tr><th>ORDER</th><th>STATUS</th><th>CREATED</th></tr></thead>
+          <tbody id="t-printify"></tbody></table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  const $=id=>document.getElementById(id);
+  const K='nec_admin';
+  let cd=60,timer;
+
+  const fmt$=n=>'$'+Number(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+  const fmtD=ts=>new Date(ts*1000).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+
+  function badge(s){
+    const m={'fulfilled':['b-green','✓ Fulfilled'],'shipped':['b-green','✓ Shipped'],'in-production':['b-gold','⚙ In Production'],'sending-to-production':['b-gold','⚙ Sending'],'pending':['b-muted','· Pending'],'on-hold':['b-muted','⏸ On Hold'],'canceled':['b-red','✕ Canceled']};
+    const[c,l]=m[s]||['b-muted',s];
+    return`<span class="badge ${c}">${l}</span>`;
+  }
+
+  async function load(){
+    const key=sessionStorage.getItem(K);if(!key)return;
+    $('spinner').style.display='block';$('content').style.display='none';
+    try{
+      const r=await fetch('/api/admin/stats',{headers:{'x-admin-key':key}});
+      if(r.status===401){logout();return;}
+      const d=await r.json();
+      $('s-today').textContent=fmt$(d.revenue.today);
+      $('s-month').textContent=fmt$(d.revenue.month);
+      $('s-total').textContent=fmt$(d.revenue.total);
+      $('s-orders').textContent=d.orderCount;
+      $('s-avail').textContent=fmt$(d.balance.available);
+      $('s-pend').textContent=fmt$(d.balance.pending)+' pending';
+      $('t-orders').innerHTML=d.orders.length
+        ?d.orders.map(o=>`<tr><td><code style="color:var(--gold);font-size:.76rem">#${o.id}</code></td><td>${o.customer}</td><td class="dim" style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${o.items}</td><td class="amt">${fmt$(o.amount)}</td><td class="dim">${fmtD(o.created)}</td></tr>`).join('')
+        :'<tr class="empty-row"><td colspan="5">No orders yet</td></tr>';
+      $('t-printify').innerHTML=d.printifyOrders.length
+        ?d.printifyOrders.map(o=>`<tr><td><code style="color:var(--muted);font-size:.76rem">${o.label}</code></td><td>${badge(o.status)}</td><td class="dim">${o.created?new Date(o.created).toLocaleDateString('en-US',{month:'short',day:'numeric'}):'—'}</td></tr>`).join('')
+        :'<tr class="empty-row"><td colspan="3">No Printify orders yet</td></tr>';
+      $('spinner').style.display='none';$('content').style.display='block';
+    }catch{$('spinner').innerHTML='<p style="color:var(--terra)">Failed to load. Retrying…</p>';}
+    resetCd();
+  }
+
+  function resetCd(){
+    clearInterval(timer);cd=60;
+    timer=setInterval(()=>{cd--;$('tick').textContent=`Refreshing in ${cd}s`;if(cd<=0)load();},1000);
+  }
+
+  function logout(){
+    sessionStorage.removeItem(K);clearInterval(timer);
+    $('dashboard').style.display='none';$('login').style.display='flex';$('pwd').value='';
+  }
+
+  async function tryLogin(){
+    const pw=$('pwd').value.trim();if(!pw)return;
+    $('login-btn').disabled=true;$('login-btn').textContent='...';$('login-err').textContent='';
+    try{
+      const r=await fetch('/api/admin/stats',{headers:{'x-admin-key':pw}});
+      if(r.ok){
+        sessionStorage.setItem(K,pw);
+        $('login').style.display='none';$('dashboard').style.display='block';load();
+      }else{
+        $('login-err').textContent='Incorrect password.';$('pwd').value='';$('pwd').focus();
+      }
+    }catch{$('login-err').textContent='Connection error.';}
+    $('login-btn').disabled=false;$('login-btn').textContent='SIGN IN';
+  }
+
+  if(sessionStorage.getItem(K)){$('login').style.display='none';$('dashboard').style.display='block';load();}
+  $('login-btn').addEventListener('click',tryLogin);
+  $('pwd').addEventListener('keydown',e=>{if(e.key==='Enter')tryLogin();});
+  $('logout-btn').addEventListener('click',logout);
+  $('refresh-btn').addEventListener('click',load);
+</script>
+</body>
+</html>

@@ -134,7 +134,23 @@ const CartState = (() => {
 
     if (emptyState) emptyState.style.display = 'none';
     if (footer) footer.hidden = false;
-    if (subtotalEl) subtotalEl.textContent = `$${getSubtotal()}`;
+
+    // Free shipping progress bar
+    const subtotal = getSubtotal();
+    if (subtotalEl) subtotalEl.textContent = `$${subtotal}`;
+    const shippingBar = document.getElementById('cart-shipping-bar');
+    if (shippingBar) {
+      const pct = Math.min((subtotal / 50) * 100, 100);
+      const msg = subtotal >= 50
+        ? '🎉 Free shipping unlocked!'
+        : `Add $${(50 - subtotal).toFixed(2)} more for free shipping`;
+      shippingBar.innerHTML = `
+        <div class="cart-shipping-bar-track">
+          <div class="cart-shipping-fill" style="width: ${pct}%"></div>
+        </div>
+        <p class="cart-shipping-msg">${msg}</p>
+      `;
+    }
 
     // Rebuild item list
     const existingItems = container.querySelectorAll('.cart-item');

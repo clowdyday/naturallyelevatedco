@@ -1,0 +1,22 @@
+{
+  "name": "Naturally Elevated Co.",
+  "short_name": "NEC",
+  "description": "New Mexico-inspired threads for the wandering soul. Desert skies, elevated minds.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#0C0B09",
+  "theme_color": "#0C0B09",
+  "icons": [
+    {
+      "src": "/assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

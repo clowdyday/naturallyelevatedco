@@ -133,6 +133,14 @@ const App = (() => {
       return;
     }
 
+    // Route: Contact
+    if (path === '/contact') {
+      appEl.innerHTML = renderContactPage();
+      initContactPage();
+      Transitions.initScrollReveal();
+      return;
+    }
+
     // Fallback — 404-style, redirect home
     appEl.innerHTML = renderHomepage();
     initShopEvents();
@@ -148,7 +156,7 @@ const App = (() => {
       const homeLink = document.querySelector('.nav-link[href="/"]');
       if (homeLink) homeLink.classList.add('active');
     }
-    if (path === '/shop' || path.match(/^\/product\/\d+$/)) {
+    if (path === '/shop' || path.match(/^\/product\/[a-zA-Z0-9_-]+$/)) {
       const shopLink = document.querySelector('.nav-link[href="/shop"]');
       if (shopLink) shopLink.classList.add('active');
     }
@@ -163,8 +171,10 @@ const App = (() => {
   function renderHomepage() {
     return `
       ${renderHero()}
+      ${renderTrustBar()}
       ${renderFeaturedStrip()}
       ${renderAbout()}
+      ${renderEmailCapture()}
     `;
   }
 
@@ -245,39 +255,56 @@ const App = (() => {
         <!-- Warm horizon glow line -->
         <div class="hero-horizon" aria-hidden="true"></div>
 
-        <!-- Split content layout: text left, logo halo right -->
-        <div class="hero-content hero-split">
+        <!-- Hero text content -->
+        <div class="hero-content">
+          <div class="hero-split">
+            <div class="hero-col--text">
+              <p class="hero-eyebrow">New Mexico · Est. 2024</p>
 
-          <!-- Left column: brand text -->
-          <div class="hero-col--text">
-            <p class="hero-eyebrow">New Mexico · Est. 2024</p>
+              <h1 id="hero-heading">
+                <span class="hero-title-1">DESERT SKIES.</span>
+                <span class="hero-title-2">ELEVATED MINDS.</span>
+              </h1>
 
-            <h1 id="hero-heading">
-              <span class="hero-title-1">DESERT SKIES.</span>
-              <br>
-              <span class="hero-title-2">ELEVATED<br>MINDS.</span>
-            </h1>
+              <p class="hero-subtitle">
+                New Mexico-inspired threads for the&nbsp;wandering soul.
+              </p>
 
-            <p class="hero-subtitle">
-              New Mexico-inspired threads for the wandering soul.
-            </p>
-
-            <div class="hero-cta">
-              <a href="/shop" class="btn-hero" data-route>
-                SHOP THE COLLECTION
-              </a>
-            </div>
-          </div>
-
-          <!-- Right column: logo with halo rings (desktop only) -->
-          <div class="hero-col--visual" aria-hidden="true">
-            <div class="hero-logo-halo">
-              <div class="logo-circle logo-circle--hero-xl">
-                <img src="assets/logo.jpg" alt="" width="200" height="200">
+              <div class="hero-cta">
+                <a href="/shop" class="btn-hero" data-route>
+                  SHOP THE COLLECTION
+                </a>
               </div>
             </div>
+            <div class="hero-col--visual" aria-hidden="true">
+              <!-- Zia sun — New Mexico state symbol, subtle terracotta watermark -->
+              <svg class="hero-zia-watermark" viewBox="0 0 200 200" fill="none"
+                   stroke="currentColor" stroke-linecap="round" stroke-width="3.5"
+                   xmlns="http://www.w3.org/2000/svg">
+                <circle cx="100" cy="100" r="16"/>
+                <!-- North: 4 rays up -->
+                <line x1="88"  y1="84"  x2="88"  y2="38"/>
+                <line x1="94"  y1="84"  x2="94"  y2="28"/>
+                <line x1="106" y1="84"  x2="106" y2="28"/>
+                <line x1="112" y1="84"  x2="112" y2="38"/>
+                <!-- South: 4 rays down -->
+                <line x1="88"  y1="116" x2="88"  y2="162"/>
+                <line x1="94"  y1="116" x2="94"  y2="172"/>
+                <line x1="106" y1="116" x2="106" y2="172"/>
+                <line x1="112" y1="116" x2="112" y2="162"/>
+                <!-- West: 4 rays left -->
+                <line x1="84"  y1="88"  x2="38"  y2="88"/>
+                <line x1="84"  y1="94"  x2="28"  y2="94"/>
+                <line x1="84"  y1="106" x2="28"  y2="106"/>
+                <line x1="84"  y1="112" x2="38"  y2="112"/>
+                <!-- East: 4 rays right -->
+                <line x1="116" y1="88"  x2="162" y2="88"/>
+                <line x1="116" y1="94"  x2="172" y2="94"/>
+                <line x1="116" y1="106" x2="172" y2="106"/>
+                <line x1="116" y1="112" x2="162" y2="112"/>
+              </svg>
+            </div>
           </div>
-
         </div>
 
         <!-- Marquee now lives in #announcement-bar (index.html) -->
@@ -294,9 +321,6 @@ const App = (() => {
     return `
       <section class="about-section grain-overlay" id="about" aria-labelledby="about-heading">
         <div class="about-inner">
-          <div class="logo-circle logo-circle--about about-logo reveal">
-            <img src="assets/logo.jpg" alt="Naturally Elevated Co. logo" width="64" height="64">
-          </div>
           <div class="zia-rule reveal" aria-hidden="true">
             <div class="zia-rule-line"></div>
             <span class="zia-rule-symbol">✦</span>
@@ -318,13 +342,106 @@ const App = (() => {
             <span class="zia-rule-symbol">✦</span>
             <div class="zia-rule-line"></div>
           </div>
-          <div class="about-pillars reveal" aria-hidden="true">
-            <span class="about-pillar">QUALITY</span>
-            <span class="about-pillar-sep">·</span>
-            <span class="about-pillar">STORY</span>
-            <span class="about-pillar-sep">·</span>
-            <span class="about-pillar">CULTURE</span>
+          <div class="about-features reveal">
+            <div class="about-feature-card">
+              <span class="about-feature-icon" aria-hidden="true">⟡</span>
+              <p class="about-feature-label">Quality</p>
+              <p class="about-feature-desc">Premium heavyweight cotton, printed in the US on demand.</p>
+            </div>
+            <div class="about-feature-card">
+              <span class="about-feature-icon" aria-hidden="true">✦</span>
+              <p class="about-feature-label">Story</p>
+              <p class="about-feature-desc">Born under New Mexico skies. Rooted in Southwest mysticism.</p>
+            </div>
+            <div class="about-feature-card">
+              <span class="about-feature-icon" aria-hidden="true">◈</span>
+              <p class="about-feature-label">Culture</p>
+              <p class="about-feature-desc">Psychedelic Americana for the wandering and the wide-awake.</p>
+            </div>
           </div>
+        </div>
+      </section>
+    `;
+  }
+
+  /**
+   * Trust bar — 4 trust items between hero and featured section.
+   * @returns {string} HTML string
+   */
+  function renderTrustBar() {
+    return `
+      <div class="trust-bar" role="complementary" aria-label="Why shop with us">
+        <div class="trust-bar-inner">
+          <div class="trust-bar-item">
+            <span class="trust-bar-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                   stroke="var(--accent-terracotta)" stroke-width="1.8"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+            </span>
+            <span class="trust-bar-label">Printed in the US</span>
+          </div>
+          <div class="trust-bar-item">
+            <span class="trust-bar-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent-terracotta)"
+                   stroke="none" aria-hidden="true">
+                <path d="M12 2l2.09 6.26H21l-5.47 3.99 2.09 6.26L12 14.52l-5.62 4 2.09-6.27L3 8.26h6.91z"/>
+              </svg>
+            </span>
+            <span class="trust-bar-label">Premium Heavyweight Cotton</span>
+          </div>
+          <div class="trust-bar-item">
+            <span class="trust-bar-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                   stroke="var(--accent-terracotta)" stroke-width="1.8"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                <line x1="12" y1="22.08" x2="12" y2="12"/>
+              </svg>
+            </span>
+            <span class="trust-bar-label">Free Shipping $50+</span>
+          </div>
+          <div class="trust-bar-item">
+            <span class="trust-bar-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                   stroke="var(--accent-terracotta)" stroke-width="1.8"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 20h9"/>
+                <path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
+              </svg>
+            </span>
+            <span class="trust-bar-label">Original Artwork</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  /**
+   * Email capture section — between about and footer.
+   * @returns {string} HTML string
+   */
+  function renderEmailCapture() {
+    return `
+      <section class="email-section" aria-labelledby="email-heading">
+        <div class="email-inner">
+          <h2 class="email-heading" id="email-heading">Stay in the Loop</h2>
+          <p class="email-sub">New designs, limited drops. No spam.</p>
+          <form class="email-form" id="email-capture-form" novalidate>
+            <input
+              type="email"
+              class="email-input"
+              placeholder="your@email.com"
+              aria-label="Email address"
+              autocomplete="email"
+              required
+            >
+            <button type="submit" class="btn-primary email-submit">NOTIFY ME</button>
+          </form>
+          <span class="email-error-msg" id="email-error-msg" role="alert">Please enter a valid email address.</span>
         </div>
       </section>
     `;
@@ -455,6 +572,31 @@ const App = (() => {
       mobileNavClose.addEventListener('click', closeMobileNav);
     }
 
+    // Item 6: Mobile nav backdrop — click the dark area to close
+    const mobileBackdrop = document.getElementById('mobile-nav-backdrop');
+    if (mobileBackdrop) {
+      mobileBackdrop.addEventListener('click', closeMobileNav);
+    }
+
+    // Item 1: SHOP dropdown — chevron toggles dropdown, text link navigates
+    const shopNavItem  = document.querySelector('.nav-item--shop');
+    const shopChevron  = document.querySelector('.nav-shop-chevron');
+    if (shopNavItem && shopChevron) {
+      shopChevron.addEventListener('click', e => {
+        e.stopPropagation();
+        const isOpen = shopNavItem.getAttribute('aria-expanded') === 'true';
+        shopNavItem.setAttribute('aria-expanded', String(!isOpen));
+        shopChevron.setAttribute('aria-expanded', String(!isOpen));
+      });
+      // Close dropdown on outside click
+      document.addEventListener('click', e => {
+        if (!shopNavItem.contains(e.target)) {
+          shopNavItem.setAttribute('aria-expanded', 'false');
+          shopChevron.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
     // Close mobile nav on Escape
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') {
@@ -462,26 +604,59 @@ const App = (() => {
         if (mobileNav && !mobileNav.hidden) closeMobileNav();
       }
     });
+
+    // Email capture form — basic confirmation (no backend yet)
+    document.body.addEventListener('submit', e => {
+      const form = e.target.closest('#email-capture-form');
+      if (!form) return;
+      e.preventDefault();
+      const input  = form.querySelector('.email-input');
+      const btn    = form.querySelector('.email-submit');
+      const errMsg = document.getElementById('email-error-msg');
+      if (!input || !input.value.trim().includes('@')) {
+        if (input) { input.focus(); input.style.borderColor = 'var(--accent-terracotta)'; }
+        if (errMsg) errMsg.classList.add('is-visible');    // Item 19: visibility toggle
+        return;
+      }
+      if (errMsg) errMsg.classList.remove('is-visible');   // Item 19
+      input.style.borderColor = '';
+      const orig = btn.textContent;
+      btn.textContent = 'SUBSCRIBED ✓';
+      btn.disabled = true;
+      input.value = '';
+      setTimeout(() => {
+        btn.textContent = orig;
+        btn.disabled = false;
+      }, 3000);
+    });
   }
 
   // ─── Init ──────────────────────────────────────────────────────────
 
   function init() {
-    document.addEventListener('DOMContentLoaded', async () => {
-      // Load live product data from Printify before rendering any view.
-      // Falls back to the static catalog in data.js if the API is unavailable.
-      await loadProducts();
-
+    document.addEventListener('DOMContentLoaded', () => {
       initEvents();
       Transitions.initBackToTop();
       Transitions.initNavShrink();
       Transitions.initScrollProgress();
       Transitions.initCursorDot();
       Transitions.initAnnouncementBar();
+      Transitions.initAnimGuard();
+
+      // Render immediately with static catalog — no waiting on API
       const path = (location.pathname.replace(BASE_PATH, '') || '/');
       renderView(path);
       SEO.update(path);
       Transitions.initScrollReveal();
+
+      // Background refresh — swap in live Printify data when ready
+      loadProducts().then(() => {
+        const p = location.pathname.replace(BASE_PATH, '') || '/';
+        if (p === '/' || p === '/shop') {
+          renderView(p);
+          Transitions.initScrollReveal();
+        }
+      }).catch(() => {});
     });
   }
 

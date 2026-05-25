@@ -44,17 +44,18 @@ function renderProductDetail(productId) {
     <button
       class="size-btn"
       role="radio"
-      aria-checked="${size === 'M' ? 'true' : 'false'}"
+      aria-checked="${i === 0 ? 'true' : 'false'}"
       aria-label="Size ${size}"
       data-size="${size}"
     >${size}</button>
   `).join('');
 
-  // Thumbnail row (same image repeated as placeholder)
-  const thumbs = [0, 1, 2, 3].map((_, i) => `
-    <div class="product-thumb-wrap${i === 0 ? ' active' : ''}" data-thumb="${i}" role="button" tabindex="0" aria-label="View image ${i + 1}">
+  // Thumbnail row — use real product images, fall back to the main image
+  const thumbImages = product.images.length > 1 ? product.images.slice(0, 4) : [product.images[0]];
+  const thumbs = thumbImages.map((img, i) => `
+    <div class="product-thumb-wrap${i === 0 ? ' active' : ''}" data-thumb="${i}" data-img-url="${img.url}" role="button" tabindex="0" aria-label="View image ${i + 1}">
       <img
-        src="${product.images[0].url}?thumb=${i}"
+        src="${img.url}"
         alt="${product.title} — view ${i + 1}"
         class="product-thumb"
         loading="lazy"
@@ -63,6 +64,11 @@ function renderProductDetail(productId) {
       >
     </div>
   `).join('');
+
+  // Split description: first sentence for blockquote, remainder for body paragraph
+  const descParts = product.description.split(/(?<=\.)\s+/);
+  const descFirst = descParts[0] || product.description;
+  const descRest  = descParts.slice(1).join(' ').trim();
 
   return `
     <div class="product-detail">
@@ -89,17 +95,15 @@ function renderProductDetail(productId) {
               height="600"
             >
           </div>
-          <div class="product-thumbnails" role="list" aria-label="Product image thumbnails">
-            ${thumbs}
-          </div>
+          ${product.images.length > 1 ? `<div class="product-thumbnails" role="list" aria-label="Product image thumbnails">${thumbs}</div>` : ''}
         </div>
 
         <!-- ── Info ── -->
         <div class="product-info" data-product-id="${product.id}">
           <h1 class="product-name display-headline">${product.title}</h1>
           <span class="product-price label-xl">$${product.price}</span>
-          <blockquote class="product-story">${product.description.split('.')[0]}.</blockquote>
-          <p class="product-description">${product.description}</p>
+          <blockquote class="product-story">${descFirst}</blockquote>
+          ${descRest ? `<p class="product-description">${descRest}</p>` : ''}
 
           <!-- Color selector -->
           ${product.colors.length > 0 ? `
@@ -119,9 +123,7 @@ function renderProductDetail(productId) {
               <p class="option-label">
                 SIZE: <span id="selected-size-label">M</span>
               </p>
-              <a href="#" class="size-guide-link" onclick="return false;" aria-label="Size guide (coming soon)">
-                Size Guide
-              </a>
+              <!-- Size guide: hidden until real URL is available -->
             </div>
             <div class="size-pills" role="radiogroup" aria-label="Select a size">
               ${sizes}
@@ -136,6 +138,22 @@ function renderProductDetail(productId) {
           >
             ADD TO CART
           </button>
+
+          <!-- Trust strip -->
+          <div class="product-trust-strip" aria-label="Product assurances">
+            <span class="trust-badge">
+              <span class="trust-badge-icon">🇺🇸</span>
+              Printed in the US
+            </span>
+            <span class="trust-badge">
+              <span class="trust-badge-icon">♻</span>
+              Sustainably sourced
+            </span>
+            <span class="trust-badge">
+              <span class="trust-badge-icon">✦</span>
+              Premium cotton
+            </span>
+          </div>
 
           <!-- Details & Care accordion -->
           <div class="accordion">
@@ -168,6 +186,15 @@ function renderProductDetail(productId) {
 
         </div><!-- /product-info -->
       </div><!-- /product-detail-grid -->
+
+      <!-- ── Related Products ── -->
+      <section class="related-products" aria-label="You may also like">
+        <div class="section-container">
+          <p class="section-label">YOU MAY ALSO LIKE</p>
+          <div class="related-products-grid" id="related-grid"></div>
+        </div>
+      </section>
+
     </div><!-- /product-detail -->
   `;
 }
@@ -181,9 +208,9 @@ function initProductDetail(productId) {
   const product = PRODUCTS.find(p => p.id === productId);
   if (!product) return;
 
-  // Track selected state
+  // Track selected state — default to first available size (not hardcoded M)
   let selectedColor = product.colors[0] || '';
-  let selectedSize = 'M';
+  let selectedSize = product.sizes[0] || null;
 
   // ── Color swatch selection ────────────────────────────────────────
   const swatchGroup = document.querySelector('.color-swatches');
@@ -253,8 +280,16 @@ function initProductDetail(productId) {
         t.classList.remove('active');
       });
       thumb.classList.add('active');
-      // In real integration, load the correct image URL here
-      // mainImg.src = thumb.querySelector('img').src;
+      // Load the real image URL from the data attribute
+      const imgUrl = thumb.dataset.imgUrl;
+      if (imgUrl) {
+        mainImg.style.opacity = '0';
+        mainImg.style.transition = 'opacity 0.25s ease';
+        setTimeout(() => {
+          mainImg.src = imgUrl;
+          mainImg.onload = () => { mainImg.style.opacity = '1'; };
+        }, 120);
+      }
     });
 
     // Keyboard support for thumbnails
@@ -271,6 +306,16 @@ function initProductDetail(productId) {
 
   if (addBtn) {
     addBtn.addEventListener('click', () => {
+      // Guard: require size selection
+      if (!selectedSize) {
+        if (sizeGroup) {
+          sizeGroup.classList.remove('shake');
+          void sizeGroup.offsetWidth; // reflow to restart animation
+          sizeGroup.classList.add('shake');
+          sizeGroup.addEventListener('animationend', () => sizeGroup.classList.remove('shake'), { once: true });
+        }
+        return;
+      }
       CartState.addToCart(productId, selectedColor, selectedSize, 1);
 
       // Success state feedback
@@ -302,4 +347,35 @@ function initProductDetail(productId) {
   // ── Back link ─────────────────────────────────────────────────────
   // Navigation is handled by the global [data-route] click delegate in app.js.
   // No custom handler needed — it navigates to href="/" automatically.
+
+  // ── Related products ──────────────────────────────────────────────
+  const relatedGrid = document.getElementById('related-grid');
+  if (relatedGrid) {
+    const productTags = product.tags || [];
+    let related = PRODUCTS.filter(p =>
+      p.id !== product.id &&
+      (p.tags || []).some(t => productTags.includes(t))
+    ).slice(0, 3);
+
+    // Fallback: any other products if no tag matches
+    if (related.length < 3) {
+      const extras = PRODUCTS.filter(p => p.id !== product.id && !related.find(r => r.id === p.id));
+      related = [...related, ...extras].slice(0, 3);
+    }
+
+    relatedGrid.innerHTML = related.map(p => `
+      <article class="related-card">
+        <a href="/product/${p.id}" class="related-card-img-link" data-route aria-label="View ${p.title}">
+          <div class="related-card-img-wrap">
+            <img src="${p.images[0].url}" alt="${p.images[0].alt}"
+              class="related-card-img" loading="lazy" width="220" height="293">
+          </div>
+        </a>
+        <div class="related-card-body">
+          <a href="/product/${p.id}" class="related-card-title" data-route>${p.title}</a>
+          <span class="related-card-price">$${p.price}</span>
+        </div>
+      </article>
+    `).join('');
+  }
 }

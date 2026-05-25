@@ -10,7 +10,7 @@ const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dst = path.join(root, 'cf-assets');
 
 // Static files / dirs to include in the Worker asset bundle
-const include = ['index.html', '404.html', 'css', 'js', 'assets'];
+const include = ['index.html', '404.html', 'admin.html', 'robots.txt', 'site.webmanifest', 'css', 'js', 'assets'];
 
 fs.rmSync(dst, { recursive: true, force: true });
 fs.mkdirSync(dst, { recursive: true });
