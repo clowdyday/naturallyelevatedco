@@ -2773,28 +2773,36 @@ a, button { transition: color var(--transition), background var(--transition), o
    NEW: HERO SPLIT LAYOUT RESPONSIVE
    ═══════════════════════════════════════════════════════════════════ */
 
-/* Below 1024px — collapse split, hide visual col */
+/* Below 1024px — collapse split, hide visual col, keep LEFT aligned */
 @media (max-width: 1024px) {
   .hero-split {
     grid-template-columns: 1fr;
-    padding: 0 2rem;
-    text-align: center;
-    max-width: 700px;
+    padding: 0 2.5rem;
+    text-align: left;
+    max-width: 760px;
+    margin: 0;
   }
   .hero-col--text {
-    align-items: center;
+    align-items: flex-start;
   }
   .hero-col--visual {
     display: none;
   }
   .hero-subtitle {
-    max-width: 100%;
+    max-width: 480px;
+  }
+  /* push content above the 44px marquee strip */
+  .hero-content {
+    padding-bottom: 64px;
   }
 }
 
 @media (max-width: 768px) {
   .hero-split {
     padding: 0 1.5rem;
+  }
+  .hero-subtitle {
+    max-width: 360px;
   }
 }
 
@@ -2992,10 +3000,198 @@ a, button { transition: color var(--transition), background var(--transition), o
   .hero-logo-halo::after { animation: none; }
   .hero-marquee-track { animation: none; }
   .cursor-dot { display: none !important; }
+  .hero-aurora,
+  .hero-glow-cool { animation: none !important; }
   .hero-eyebrow,
   .hero-title-1, .hero-title-2, .hero-subtitle, .hero-cta {
     opacity: 1 !important;
     transform: none !important;
     animation: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE OPTIMIZATION PASS
+   Full pass: iOS safe areas · touch targets · spacing · proportions
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── iOS safe viewport height (accounts for browser chrome) ─── */
+.hero {
+  min-height: 100svh;
+}
+@supports not (min-height: 100svh) {
+  .hero { min-height: 100vh; }
+}
+
+/* ─── Loading state: full viewport on iOS ─── */
+.loading-state {
+  min-height: 100svh;
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+@supports not (min-height: 100svh) {
+  .loading-state { min-height: 100vh; }
+}
+
+/* ─── Featured strip: remove fade mask + scroll breathing room ─── */
+@media (max-width: 768px) {
+  .featured-strip {
+    mask-image: none;
+    -webkit-mask-image: none;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    gap: 1rem;
+  }
+  /* scroll trail spacer */
+  .featured-strip::after {
+    content: '';
+    display: block;
+    flex: 0 0 0.25rem;
+    pointer-events: none;
+  }
+}
+
+/* ─── About section: tighter padding on mobile ─── */
+@media (max-width: 768px) {
+  .about-inner {
+    padding: 4rem 1.5rem 3.5rem;
+  }
+  .about-pullquote {
+    font-size: clamp(1.65rem, 7vw, 2.4rem);
+    margin: 0.85rem 0 1.4rem;
+  }
+  .about-pillars {
+    gap: 0.85rem;
+    margin-top: 1.75rem;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+}
+
+/* ─── Cart drawer: full-width at 600px (earlier than 480px default) ─── */
+@media (max-width: 600px) {
+  :root { --drawer-width: 100vw; }
+  .cart-drawer-header,
+  .cart-items,
+  .cart-drawer-footer { padding-left: 1.25rem; padding-right: 1.25rem; }
+}
+
+/* ─── Qty stepper: 44px touch targets on mobile ─── */
+@media (max-width: 768px) {
+  .qty-btn {
+    width: 38px;
+    height: 38px;
+    font-size: 1.15rem;
+  }
+  .qty-value {
+    height: 38px;
+    min-width: 34px;
+  }
+  .cart-item {
+    grid-template-columns: 68px 1fr auto;
+    gap: 0.85rem;
+  }
+  .cart-item-img {
+    width: 68px;
+    height: 68px;
+  }
+}
+
+/* ─── Back-to-top: safe area + larger tap target on mobile ─── */
+@media (max-width: 768px) {
+  .back-to-top {
+    bottom: max(1.5rem, calc(env(safe-area-inset-bottom) + 0.75rem));
+    right: 1.25rem;
+    width: 46px;
+    height: 46px;
+    font-size: 1.15rem;
+  }
+}
+
+/* ─── Shop grid: explicit 2-col on tablet range ─── */
+@media (max-width: 768px) and (min-width: 481px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+/* ─── Product detail: tighter top padding + larger touch areas ─── */
+@media (max-width: 768px) {
+  .product-detail {
+    padding-top: calc(var(--nav-height) + 1.25rem);
+    padding-bottom: 4rem;
+  }
+  .product-name {
+    font-size: clamp(1.65rem, 7vw, 2.4rem);
+  }
+  .product-price {
+    font-size: 1.7rem;
+  }
+  .swatch-btn {
+    width: 42px;
+    height: 42px;
+  }
+  .accordion-trigger {
+    padding: 1.1rem 0;
+    min-height: 48px;
+  }
+  .product-thumb-wrap {
+    width: 64px;
+    height: 64px;
+  }
+  .size-btn {
+    padding: 0.65rem 1rem;
+    min-height: 44px;
+  }
+}
+
+/* ─── Mobile nav: prevent overflow on very small screens ─── */
+@media (max-width: 360px) {
+  .mobile-nav-links { gap: 1.5rem; }
+  .mobile-nav-link { font-size: 1.75rem; }
+}
+
+/* ─── Hero: micro-screen (360px) polish ─── */
+@media (max-width: 360px) {
+  .hero-split { padding: 0 1rem; }
+  .hero-title-1,
+  .hero-title-2 {
+    font-size: clamp(2.1rem, 12vw, 2.8rem);
+    letter-spacing: -0.02em;
+  }
+  .hero-eyebrow { font-size: 0.6rem; }
+  .hero-subtitle { font-size: 0.88rem; }
+  .btn-hero {
+    width: 100%;
+    text-align: center;
+    padding: 0.9rem 1.5rem;
+  }
+}
+
+/* ─── Footer: comfortable touch targets ─── */
+@media (max-width: 768px) {
+  .footer-inner { padding: 3rem 1.5rem 2.5rem; }
+  .footer-col-links { gap: 1rem; }
+  .footer-link {
+    font-size: 0.92rem;
+    display: inline-block;
+    padding: 0.12rem 0;
+  }
+  .footer-social-link {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* ─── Policy pages: breathing room on mobile ─── */
+@media (max-width: 768px) {
+  .policy-inner { padding: 2.5rem 1.25rem 4rem; }
+  .policy-title { font-size: clamp(1.8rem, 8vw, 2.4rem); }
+}
+
+/* ─── Success page: safe area padding ─── */
+@media (max-width: 768px) {
+  .success-page {
+    padding-bottom: max(3rem, calc(env(safe-area-inset-bottom) + 2rem));
   }
 }
