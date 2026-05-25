@@ -54,6 +54,7 @@ ul, ol { list-style: none; }
   --font-body:    'Plus Jakarta Sans', system-ui, sans-serif;
 
   --nav-height: 68px;
+  --announcement-height: 36px;
   --drawer-width: 420px;
   --section-pad: 5rem 1.5rem;
   --card-radius: 2px;
@@ -153,10 +154,59 @@ h4, h5, h6, .label, .section-label, .nav-link, .btn-primary, .btn-outline {
 .logo-circle--about  { width: 64px;  height: 64px;  border-width: 2.5px; }
 .logo-circle--footer { width: 58px;  height: 58px;  border-width: 2px; }
 
+/* ─── 4c. ANNOUNCEMENT BAR ───────────────────────────────────────── */
+/*
+ * Fixed above the navbar. Uses display:inline-block on the track so
+ * translateX(-50%) is relative to the track's OWN width (content width),
+ * not the parent container — that's what makes the scroll work.
+ * 4 identical text spans → -50% moves exactly 2 spans → seamless loop.
+ */
+#announcement-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--announcement-height);
+  background: var(--bg-card);
+  border-bottom: 1px solid rgba(196, 96, 42, 0.3);
+  overflow: hidden;
+  z-index: 102;
+}
+
+.announcement-track {
+  display: inline-block; /* sizes to content — required for translateX(-50%) to work */
+  white-space: nowrap;
+  padding-top: 1px; /* sub-pixel vertical nudge */
+  animation: announcementScroll 30s linear infinite;
+  will-change: transform;
+}
+
+.announcement-text {
+  display: inline;
+  font-family: var(--font-label);
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  color: rgba(196, 96, 42, 0.72);
+  text-transform: uppercase;
+  white-space: nowrap;
+  line-height: var(--announcement-height);
+  padding-right: 4rem; /* gap between repetitions */
+}
+
+@keyframes announcementScroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .announcement-track { animation: none; }
+}
+
 /* ─── 5. NAVBAR ───────────────────────────────────────────────────── */
 #navbar {
   position: fixed;
-  top: 0;
+  top: var(--announcement-height);
   left: 0;
   right: 0;
   z-index: 100;
@@ -359,7 +409,7 @@ h4, h5, h6, .label, .section-label, .nav-link, .btn-primary, .btn-outline {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: var(--nav-height);
+  padding-top: calc(var(--nav-height) + var(--announcement-height));
   background: var(--bg-primary);
   overflow: hidden;
 }
@@ -1070,7 +1120,7 @@ h4, h5, h6, .label, .section-label, .nav-link, .btn-primary, .btn-outline {
 
 /* ─── 11. PRODUCT DETAIL ──────────────────────────────────────────── */
 .product-detail {
-  padding-top: calc(var(--nav-height) + 2rem);
+  padding-top: calc(var(--nav-height) + var(--announcement-height) + 2rem);
   padding-bottom: 5rem;
   max-width: 1100px;
   margin: 0 auto;
@@ -1098,7 +1148,7 @@ h4, h5, h6, .label, .section-label, .nav-link, .btn-primary, .btn-outline {
 }
 
 /* Gallery */
-.product-gallery { position: sticky; top: calc(var(--nav-height) + 1.5rem); }
+.product-gallery { position: sticky; top: calc(var(--nav-height) + var(--announcement-height) + 1.5rem); }
 
 .product-main-img-wrap {
   aspect-ratio: 1/1;
@@ -1576,14 +1626,14 @@ body.drawer-open { overflow: hidden; }
 
 /* ─── 13. SUCCESS PAGE ────────────────────────────────────────────── */
 .success-page {
-  min-height: calc(100vh - var(--nav-height));
-  padding-top: var(--nav-height);
+  min-height: calc(100vh - var(--nav-height) - var(--announcement-height));
+  padding-top: calc(var(--nav-height) + var(--announcement-height));
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: calc(var(--nav-height) + 3rem) 1.5rem 3rem;
+  padding: calc(var(--nav-height) + var(--announcement-height) + 3rem) 1.5rem 3rem;
   background: var(--bg-primary);
 }
 
@@ -1853,13 +1903,13 @@ body.drawer-open { overflow: hidden; }
 
 /* ─── 16. LOADING STATE ───────────────────────────────────────────── */
 .loading-state {
-  min-height: calc(100vh - var(--nav-height));
+  min-height: calc(100vh - var(--nav-height) - var(--announcement-height));
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 1.25rem;
-  padding-top: var(--nav-height);
+  padding-top: calc(var(--nav-height) + var(--announcement-height));
   color: var(--text-muted);
   font-family: var(--font-label);
   letter-spacing: 0.18em;
@@ -2273,7 +2323,7 @@ a, button { transition: color var(--transition), background var(--transition), o
 
 /* ─── Shop Catalog Page ─── */
 .shop-page {
-  padding-top: calc(var(--nav-height) + 2rem);
+  padding-top: calc(var(--nav-height) + var(--announcement-height) + 2rem);
   min-height: 100vh;
   background: var(--bg-primary);
 }
@@ -2384,7 +2434,7 @@ a, button { transition: color var(--transition), background var(--transition), o
 /* Sidebar */
 .shop-sidebar {
   position: sticky;
-  top: calc(var(--nav-height) + 1.5rem);
+  top: calc(var(--nav-height) + var(--announcement-height) + 1.5rem);
 }
 
 .sidebar-section {
@@ -2584,8 +2634,8 @@ a, button { transition: color var(--transition), background var(--transition), o
    ═══════════════════════════════════════════════════════════════════ */
 
 .policy-page {
-  min-height: calc(100vh - var(--nav-height));
-  padding-top: var(--nav-height);
+  min-height: calc(100vh - var(--nav-height) - var(--announcement-height));
+  padding-top: calc(var(--nav-height) + var(--announcement-height));
   background: var(--bg-primary);
 }
 
@@ -3118,7 +3168,7 @@ a, button { transition: color var(--transition), background var(--transition), o
 /* ─── Product detail: tighter top padding + larger touch areas ─── */
 @media (max-width: 768px) {
   .product-detail {
-    padding-top: calc(var(--nav-height) + 1.25rem);
+    padding-top: calc(var(--nav-height) + var(--announcement-height) + 1.25rem);
     padding-bottom: 4rem;
   }
   .product-name {

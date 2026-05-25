@@ -277,13 +277,7 @@ const App = (() => {
 
         </div>
 
-        <!-- Marquee ticker strip at bottom of hero -->
-        <div class="hero-marquee" aria-hidden="true">
-          <div class="hero-marquee-track">
-            <span class="hero-marquee-text">DESERT SKIES &nbsp;·&nbsp; ELEVATED MINDS &nbsp;·&nbsp; NEW MEXICO &nbsp;·&nbsp; PSYCHEDELIC AMERICANA &nbsp;·&nbsp; PREMIUM HEAVYWEIGHT COTTON &nbsp;·&nbsp; PRINTED IN THE US &nbsp;·&nbsp; SINCE 2024 &nbsp;·&nbsp;</span>
-            <span class="hero-marquee-text">DESERT SKIES &nbsp;·&nbsp; ELEVATED MINDS &nbsp;·&nbsp; NEW MEXICO &nbsp;·&nbsp; PSYCHEDELIC AMERICANA &nbsp;·&nbsp; PREMIUM HEAVYWEIGHT COTTON &nbsp;·&nbsp; PRINTED IN THE US &nbsp;·&nbsp; SINCE 2024 &nbsp;·&nbsp;</span>
-          </div>
-        </div>
+        <!-- Marquee now lives in #announcement-bar (index.html) -->
 
       </section>
     `;
