@@ -156,13 +156,9 @@ h4, h5, h6, .label, .section-label, .nav-link, .btn-primary, .btn-outline {
 
 /* ─── 4c. ANNOUNCEMENT BAR ───────────────────────────────────────── */
 /*
- * How the loop works:
- *  - Parent: display:flex → both tracks are side by side
- *  - Each track: min-width:100% → each fills the full bar width
- *  - Track 1 starts at x=0 (visible). Track 2 starts at x=100% (off-screen right).
- *  - Both animate translateX(-100%) simultaneously.
- *  - Track 1 exits left. Track 2 enters from right and fills the gap.
- *  - Both reset to x=0 / x=100% at the same instant. Seamless loop.
+ * Animation is JS-driven (transitions.js → initAnnouncementBar).
+ * JS clones the track, measures offsetWidth, and scrolls both with
+ * requestAnimationFrame. No CSS animation = no browser quirks.
  */
 #announcement-bar {
   position: fixed;
@@ -173,16 +169,20 @@ h4, h5, h6, .label, .section-label, .nav-link, .btn-primary, .btn-outline {
   background: var(--bg-card);
   border-bottom: 1px solid rgba(196, 96, 42, 0.3);
   z-index: 102;
-  display: flex;          /* side-by-side tracks */
-  align-items: center;
   overflow: hidden;
   user-select: none;
 }
 
 .announcement-track {
-  flex-shrink: 0;
-  min-width: 100%;        /* each track fills the full viewport width */
+  position: absolute;   /* removed from flow so offsetWidth = content width */
+  top: 0;
+  left: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
   white-space: nowrap;
+  will-change: transform;
+
   font-family: var(--font-label);
   font-size: 0.6rem;
   font-weight: 900;
@@ -190,17 +190,6 @@ h4, h5, h6, .label, .section-label, .nav-link, .btn-primary, .btn-outline {
   color: rgba(196, 96, 42, 0.78);
   text-transform: uppercase;
   padding: 0 3rem;
-  animation: announcementScroll 26s linear infinite;
-  will-change: transform;
-}
-
-@keyframes announcementScroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-100%); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .announcement-track { animation: none; }
 }
 
 /* ─── 5. NAVBAR ───────────────────────────────────────────────────── */

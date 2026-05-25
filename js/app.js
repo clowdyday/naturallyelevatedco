@@ -462,6 +462,7 @@ const App = (() => {
       Transitions.initNavShrink();
       Transitions.initScrollProgress();
       Transitions.initCursorDot();
+      Transitions.initAnnouncementBar();
       const path = (location.pathname.replace(BASE_PATH, '') || '/');
       renderView(path);
       SEO.update(path);

@@ -143,6 +143,51 @@ const Transitions = (() => {
     });
   }
 
+  /**
+   * Announcement bar marquee — driven by requestAnimationFrame.
+   * Clones the .announcement-track so the scroll loops seamlessly:
+   *   track  → scrolls left (exits)
+   *   clone  → follows immediately behind (enters)
+   * When offset reaches trackWidth it resets to 0 — invisible because
+   * both elements are at the same position as the start of the cycle.
+   */
+  function initAnnouncementBar() {
+    const bar   = document.getElementById('announcement-bar');
+    if (!bar) return;
+
+    const track = bar.querySelector('.announcement-track');
+    if (!track) return;
+
+    // Clone for seamless loop
+    const clone = track.cloneNode(true);
+    clone.setAttribute('aria-hidden', 'true');
+    bar.appendChild(clone);
+
+    // Measure content width (position:absolute means offsetWidth = real content width)
+    const trackW = track.offsetWidth;
+    if (!trackW) return;
+
+    const SPEED  = 55;   // pixels per second
+    let   offset = 0;
+    let   lastTs = 0;
+
+    function tick(ts) {
+      if (!lastTs) lastTs = ts;
+      // Cap delta to 50 ms — handles tab switch / background suspend
+      const dt = Math.min((ts - lastTs) / 1000, 0.05);
+      lastTs = ts;
+
+      offset = (offset + SPEED * dt) % trackW;
+
+      track.style.transform = `translateX(${-offset}px)`;
+      clone.style.transform  = `translateX(${trackW - offset}px)`;
+
+      requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
+  }
+
   return {
     fadeOut,
     fadeIn,
@@ -150,6 +195,7 @@ const Transitions = (() => {
     initBackToTop,
     initNavShrink,
     initScrollProgress,
-    initCursorDot
+    initCursorDot,
+    initAnnouncementBar
   };
 })();
