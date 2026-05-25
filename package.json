@@ -8,8 +8,9 @@
     "wrangler": "^3.0.0"
   },
   "scripts": {
-    "dev": "wrangler pages dev . --compatibility-flag nodejs_compat",
-    "deploy": "wrangler pages deploy ."
+    "sync:cf-assets": "node scripts/sync-cf-assets.mjs",
+    "deploy": "npm run sync:cf-assets && npx wrangler deploy",
+    "dev": "npx wrangler dev --port 8788"
   }
 }
 
