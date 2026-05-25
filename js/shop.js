@@ -16,17 +16,18 @@
 function renderFeaturedStrip() {
   const featured = PRODUCTS.filter(p => p.featured);
 
-  const cards = featured.map(product => `
+  const cards = featured.map((product, index) => `
     <article class="featured-card reveal" data-product-id="${product.id}">
       <a href="/product/${product.id}" class="featured-card-img-link" data-route>
         <div class="featured-card-img-wrap">
+          ${index === 0 ? '<span class="featured-card-badge">Featured Drop</span>' : ''}
           <img
             src="${product.images[0].url}"
             alt="${product.images[0].alt}"
             class="featured-card-img"
             loading="lazy"
             width="280"
-            height="280"
+            height="420"
           >
         </div>
       </a>

@@ -96,8 +96,9 @@ function renderProductDetail(productId) {
 
         <!-- ── Info ── -->
         <div class="product-info" data-product-id="${product.id}">
-          <h1 class="product-name">${product.title}</h1>
-          <p class="product-price">$${product.price}</p>
+          <h1 class="product-name display-headline">${product.title}</h1>
+          <span class="product-price label-xl">$${product.price}</span>
+          <blockquote class="product-story">${product.description.split('.')[0]}.</blockquote>
           <p class="product-description">${product.description}</p>
 
           <!-- Color selector -->

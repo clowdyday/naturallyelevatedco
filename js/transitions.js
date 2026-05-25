@@ -88,5 +88,68 @@ const Transitions = (() => {
     }, { passive: true });
   }
 
-  return { fadeOut, fadeIn, initScrollReveal, initBackToTop, initNavShrink };
+  /**
+   * Scroll progress bar — scales the #scroll-progress element
+   * from scaleX(0) → scaleX(1) as the page scrolls.
+   */
+  function initScrollProgress() {
+    const bar = document.getElementById('scroll-progress');
+    if (!bar) return;
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const ratio = maxScroll > 0 ? scrolled / maxScroll : 0;
+      bar.style.transform = `scaleX(${ratio})`;
+    }, { passive: true });
+  }
+
+  /**
+   * Custom cursor dot — follows mouse on pointer (non-touch) devices.
+   * The dot element (.cursor-dot) is added in index.html.
+   */
+  function initCursorDot() {
+    // Only on devices with a precise pointer (mouse)
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+    const dot = document.querySelector('.cursor-dot');
+    if (!dot) return;
+
+    // Activate after first mouse move
+    let activated = false;
+    document.addEventListener('mousemove', e => {
+      if (!activated) {
+        dot.classList.add('is-active');
+        activated = true;
+      }
+      // Use left/top for position (transform handles centering in CSS)
+      dot.style.left = e.clientX + 'px';
+      dot.style.top  = e.clientY + 'px';
+    }, { passive: true });
+
+    document.addEventListener('mousedown', () => {
+      dot.classList.add('is-clicking');
+    });
+    document.addEventListener('mouseup', () => {
+      dot.classList.remove('is-clicking');
+    });
+
+    // Hide dot when leaving the window
+    document.addEventListener('mouseleave', () => {
+      dot.classList.remove('is-active');
+      activated = false;
+    });
+    document.addEventListener('mouseenter', () => {
+      if (activated) dot.classList.add('is-active');
+    });
+  }
+
+  return {
+    fadeOut,
+    fadeIn,
+    initScrollReveal,
+    initBackToTop,
+    initNavShrink,
+    initScrollProgress,
+    initCursorDot
+  };
 })();

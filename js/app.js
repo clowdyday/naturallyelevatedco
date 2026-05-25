@@ -167,32 +167,36 @@ const App = (() => {
 
   /**
    * Hero section — full viewport height with CSS desert scene.
+   * Desktop: asymmetric split (text left, logo halo right).
+   * Mobile: stacked centered.
    * @returns {string} HTML string
    */
   function renderHero() {
     return `
       <section class="hero grain-overlay" aria-labelledby="hero-heading">
 
-        <!-- Warm amber horizon glow (base) -->
+        <!-- Sky depth gradient (section 7 ::before handles this) -->
+
+        <!-- Warm amber horizon glow -->
         <div class="hero-glow-warm" aria-hidden="true"></div>
 
-        <!-- Cool dusty rose overlay — pulses via CSS animation -->
+        <!-- Cool violet pulse overlay -->
         <div class="hero-glow-cool" aria-hidden="true"></div>
 
         <!-- Aurora layer — slow drifting color bloom -->
         <div class="hero-aurora" aria-hidden="true"></div>
 
-        <!-- Star field (~30 dots via CSS box-shadow) -->
+        <!-- Star field layer 1 -->
         <div class="hero-stars" aria-hidden="true"></div>
 
-        <!-- Second star layer — twinkling offset -->
+        <!-- Star field layer 2 — twinkling offset -->
         <div class="hero-stars-2" aria-hidden="true"></div>
 
-        <!-- Saguaro cactus silhouettes (inline SVG, 5 cacti) -->
+        <!-- Saguaro cactus silhouettes (inline SVG) -->
         <svg class="hero-cacti" viewBox="0 0 1440 180" preserveAspectRatio="xMidYMax slice"
              aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
           <!-- Cactus 1 — tall, left area -->
-          <g fill="#1a1915">
+          <g fill="#141210">
             <rect x="108" y="40" width="18" height="140"/>
             <rect x="72"  y="80" width="36" height="14"/>
             <rect x="72"  y="56" width="14" height="38"/>
@@ -200,7 +204,7 @@ const App = (() => {
             <rect x="148" y="66" width="14" height="38"/>
           </g>
           <!-- Cactus 2 — shorter, left-center -->
-          <g fill="#1a1915">
+          <g fill="#141210">
             <rect x="318" y="70" width="13" height="110"/>
             <rect x="288" y="100" width="30" height="10"/>
             <rect x="288" y="82"  width="10" height="28"/>
@@ -208,7 +212,7 @@ const App = (() => {
             <rect x="349" y="90"  width="10" height="28"/>
           </g>
           <!-- Cactus 3 — tallest, center -->
-          <g fill="#1a1915">
+          <g fill="#141210">
             <rect x="698" y="24" width="22" height="156"/>
             <rect x="654" y="72" width="44" height="16"/>
             <rect x="654" y="44" width="16" height="44"/>
@@ -216,7 +220,7 @@ const App = (() => {
             <rect x="748" y="56" width="16" height="44"/>
           </g>
           <!-- Cactus 4 — medium, right-center -->
-          <g fill="#1a1915">
+          <g fill="#141210">
             <rect x="1040" y="55" width="15" height="125"/>
             <rect x="1010" y="88" width="30" height="11"/>
             <rect x="1010" y="68" width="11" height="30"/>
@@ -224,7 +228,7 @@ const App = (() => {
             <rect x="1072" y="76" width="11" height="30"/>
           </g>
           <!-- Cactus 5 — shorter, right -->
-          <g fill="#1a1915">
+          <g fill="#141210">
             <rect x="1310" y="75" width="12" height="105"/>
             <rect x="1284" y="102" width="26" height="9"/>
             <rect x="1284" y="86"  width="9"  height="25"/>
@@ -232,29 +236,52 @@ const App = (() => {
             <rect x="1337" y="94"  width="9"  height="25"/>
           </g>
           <!-- Ground fill -->
-          <rect x="0" y="170" width="1440" height="10" fill="#1a1915"/>
+          <rect x="0" y="170" width="1440" height="10" fill="#141210"/>
         </svg>
 
-        <!-- Centered hero content -->
-        <div class="hero-content">
-          <div class="logo-circle logo-circle--hero hero-logo">
-            <img src="assets/logo.jpg" alt="Naturally Elevated Co. logo" width="96" height="96">
+        <!-- Warm horizon glow line -->
+        <div class="hero-horizon" aria-hidden="true"></div>
+
+        <!-- Split content layout: text left, logo halo right -->
+        <div class="hero-content hero-split">
+
+          <!-- Left column: brand text -->
+          <div class="hero-col--text">
+            <p class="hero-eyebrow">New Mexico · Est. 2024</p>
+
+            <h1 id="hero-heading">
+              <span class="hero-title-1">DESERT SKIES.</span>
+              <br>
+              <span class="hero-title-2">ELEVATED<br>MINDS.</span>
+            </h1>
+
+            <p class="hero-subtitle">
+              New Mexico-inspired threads for the wandering soul.
+            </p>
+
+            <div class="hero-cta">
+              <a href="/shop" class="btn-hero" data-route>
+                SHOP THE COLLECTION
+              </a>
+            </div>
           </div>
 
-          <h1 id="hero-heading">
-            <span class="hero-title-1">DESERT SKIES.</span>
-            <br>
-            <span class="hero-title-2">ELEVATED MINDS.</span>
-          </h1>
+          <!-- Right column: logo with halo rings (desktop only) -->
+          <div class="hero-col--visual" aria-hidden="true">
+            <div class="hero-logo-halo">
+              <div class="logo-circle logo-circle--hero-xl">
+                <img src="assets/logo.jpg" alt="" width="200" height="200">
+              </div>
+            </div>
+          </div>
 
-          <p class="hero-subtitle">
-            New Mexico-inspired threads for the wandering soul.
-          </p>
+        </div>
 
-          <div class="hero-cta">
-            <a href="/shop" class="btn-hero" data-route>
-              SHOP THE COLLECTION
-            </a>
+        <!-- Marquee ticker strip at bottom of hero -->
+        <div class="hero-marquee" aria-hidden="true">
+          <div class="hero-marquee-track">
+            <span class="hero-marquee-text">DESERT SKIES &nbsp;·&nbsp; ELEVATED MINDS &nbsp;·&nbsp; NEW MEXICO &nbsp;·&nbsp; PSYCHEDELIC AMERICANA &nbsp;·&nbsp; PREMIUM HEAVYWEIGHT COTTON &nbsp;·&nbsp; PRINTED IN THE US &nbsp;·&nbsp; SINCE 2024 &nbsp;·&nbsp;</span>
+            <span class="hero-marquee-text">DESERT SKIES &nbsp;·&nbsp; ELEVATED MINDS &nbsp;·&nbsp; NEW MEXICO &nbsp;·&nbsp; PSYCHEDELIC AMERICANA &nbsp;·&nbsp; PREMIUM HEAVYWEIGHT COTTON &nbsp;·&nbsp; PRINTED IN THE US &nbsp;·&nbsp; SINCE 2024 &nbsp;·&nbsp;</span>
           </div>
         </div>
 
@@ -263,32 +290,43 @@ const App = (() => {
   }
 
   /**
-   * About section — brand story, grain texture, Zia divider.
+   * About section — brand story, pullquote, pillars, grain texture.
    * @returns {string} HTML string
    */
   function renderAbout() {
     return `
       <section class="about-section grain-overlay" id="about" aria-labelledby="about-heading">
         <div class="about-inner">
-          <div class="logo-circle logo-circle--about about-logo">
+          <div class="logo-circle logo-circle--about about-logo reveal">
             <img src="assets/logo.jpg" alt="Naturally Elevated Co. logo" width="64" height="64">
           </div>
-          <div class="zia-rule" aria-hidden="true">
+          <div class="zia-rule reveal" aria-hidden="true">
             <div class="zia-rule-line"></div>
             <span class="zia-rule-symbol">✦</span>
             <div class="zia-rule-line"></div>
           </div>
-          <p class="about-heading" id="about-heading">// ABOUT US</p>
-          <p class="about-text">
-            Born under desert skies in New Mexico. Naturally Elevated Co. makes tees for
-            elevated minds — designs rooted in Southwest mysticism, psychedelic Americana,
-            and the frequencies that move between worlds. Every shirt carries a story.
-            Wear it like you mean it.
+          <p class="about-heading reveal" id="about-heading">ABOUT US</p>
+          <blockquote class="about-pullquote reveal">"Born under desert skies."</blockquote>
+          <p class="about-text reveal">
+            Naturally Elevated Co. makes threads for elevated minds — designs rooted in
+            Southwest mysticism, psychedelic Americana, and the frequencies that move
+            between worlds. Every shirt carries a story. Born in New Mexico. Worn everywhere.
           </p>
-          <div class="zia-rule" aria-hidden="true">
+          <p class="about-text reveal">
+            Premium heavyweight cotton, printed in the US. No mass-market filler — just
+            original art, real quality, and the kind of vibe you can actually feel.
+          </p>
+          <div class="zia-rule reveal" aria-hidden="true">
             <div class="zia-rule-line"></div>
             <span class="zia-rule-symbol">✦</span>
             <div class="zia-rule-line"></div>
+          </div>
+          <div class="about-pillars reveal" aria-hidden="true">
+            <span class="about-pillar">QUALITY</span>
+            <span class="about-pillar-sep">·</span>
+            <span class="about-pillar">STORY</span>
+            <span class="about-pillar-sep">·</span>
+            <span class="about-pillar">CULTURE</span>
           </div>
         </div>
       </section>
@@ -303,9 +341,9 @@ const App = (() => {
     return `
       <div class="success-page">
         <div class="success-check" aria-hidden="true">✓</div>
-        <h2 class="success-heading">ORDER RECEIVED.</h2>
-        <p class="success-body">Your tee is on its way. Keep it elevated.</p>
-        <a href="/" class="btn-outline" data-route>← BACK TO SHOP</a>
+        <h2 class="success-heading">Order Received.</h2>
+        <p class="success-body">Your drop is on its way. Keep it elevated.</p>
+        <a href="/" class="btn-outline" data-route>← BACK TO THE COLLECTION</a>
       </div>
     `;
   }
@@ -428,6 +466,8 @@ const App = (() => {
       initEvents();
       Transitions.initBackToTop();
       Transitions.initNavShrink();
+      Transitions.initScrollProgress();
+      Transitions.initCursorDot();
       const path = (location.pathname.replace(BASE_PATH, '') || '/');
       renderView(path);
       SEO.update(path);
