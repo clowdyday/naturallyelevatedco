@@ -5,7 +5,7 @@
  * Open Graph tags, Twitter Card tags, and JSON-LD structured data.
  */
 const SEO = (() => {
-  const BASE_URL = 'https://naturallyelevatedco.com'; // update when live
+  const BASE_URL = 'https://naturallyelevated.co';
   const DEFAULT = {
     title: 'Naturally Elevated Co. | Desert Skies. Elevated Minds.',
     description: 'New Mexico-inspired threads for the wandering soul. Desert skies, elevated minds. Shop the collection.',
@@ -54,7 +54,7 @@ const SEO = (() => {
   }
 
   function update(path) {
-    const productMatch = path.match(/^\/product\/(\d+)$/);
+    const productMatch = path.match(/^\/product\/([a-zA-Z0-9_-]+)$/);
     let title       = DEFAULT.title;
     let description = DEFAULT.description;
     let image       = DEFAULT.image;
@@ -66,7 +66,9 @@ const SEO = (() => {
     };
 
     if (productMatch) {
-      const product = PRODUCTS.find(p => p.id === parseInt(productMatch[1], 10));
+      const rawId = productMatch[1];
+      const productId = /^\d+$/.test(rawId) ? parseInt(rawId, 10) : rawId;
+      const product = PRODUCTS.find(p => p.id === productId);
       if (product) {
         title       = product.title + ' | Naturally Elevated Co.';
         description = product.description.slice(0, 155);
