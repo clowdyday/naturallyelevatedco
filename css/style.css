@@ -156,10 +156,13 @@ h4, h5, h6, .label, .section-label, .nav-link, .btn-primary, .btn-outline {
 
 /* ─── 4c. ANNOUNCEMENT BAR ───────────────────────────────────────── */
 /*
- * Fixed above the navbar. Uses display:inline-block on the track so
- * translateX(-50%) is relative to the track's OWN width (content width),
- * not the parent container — that's what makes the scroll work.
- * 4 identical text spans → -50% moves exactly 2 spans → seamless loop.
+ * How the loop works:
+ *  - Parent: display:flex → both tracks are side by side
+ *  - Each track: min-width:100% → each fills the full bar width
+ *  - Track 1 starts at x=0 (visible). Track 2 starts at x=100% (off-screen right).
+ *  - Both animate translateX(-100%) simultaneously.
+ *  - Track 1 exits left. Track 2 enters from right and fills the gap.
+ *  - Both reset to x=0 / x=100% at the same instant. Seamless loop.
  */
 #announcement-bar {
   position: fixed;
@@ -169,34 +172,31 @@ h4, h5, h6, .label, .section-label, .nav-link, .btn-primary, .btn-outline {
   height: var(--announcement-height);
   background: var(--bg-card);
   border-bottom: 1px solid rgba(196, 96, 42, 0.3);
-  overflow: hidden;
   z-index: 102;
+  display: flex;          /* side-by-side tracks */
+  align-items: center;
+  overflow: hidden;
+  user-select: none;
 }
 
 .announcement-track {
-  display: inline-block; /* sizes to content — required for translateX(-50%) to work */
+  flex-shrink: 0;
+  min-width: 100%;        /* each track fills the full viewport width */
   white-space: nowrap;
-  padding-top: 1px; /* sub-pixel vertical nudge */
-  animation: announcementScroll 30s linear infinite;
+  font-family: var(--font-label);
+  font-size: 0.6rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  color: rgba(196, 96, 42, 0.78);
+  text-transform: uppercase;
+  padding: 0 3rem;
+  animation: announcementScroll 26s linear infinite;
   will-change: transform;
 }
 
-.announcement-text {
-  display: inline;
-  font-family: var(--font-label);
-  font-size: 0.58rem;
-  font-weight: 900;
-  letter-spacing: 0.2em;
-  color: rgba(196, 96, 42, 0.72);
-  text-transform: uppercase;
-  white-space: nowrap;
-  line-height: var(--announcement-height);
-  padding-right: 4rem; /* gap between repetitions */
-}
-
 @keyframes announcementScroll {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100%); }
 }
 
 @media (prefers-reduced-motion: reduce) {
