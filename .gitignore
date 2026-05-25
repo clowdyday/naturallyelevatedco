@@ -8,6 +8,10 @@ node_modules/
 *.db-shm
 *.db-wal
 
+# Local environment — NEVER commit secrets
+.env
+.env.local
+
 # MCP / internal config
 .mcp.json
 

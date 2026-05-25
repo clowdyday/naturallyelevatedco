@@ -81,10 +81,10 @@ const App = (() => {
       return;
     }
 
-    // Route: product detail  /product/:id
-    const productMatch = path.match(/^\/product\/(\d+)$/);
+    // Route: product detail  /product/:id  (supports both integer and UUID Printify IDs)
+    const productMatch = path.match(/^\/product\/([a-zA-Z0-9_-]+)$/);
     if (productMatch) {
-      const productId = parseInt(productMatch[1], 10);
+      const productId = productMatch[1];
       appEl.innerHTML = renderProductDetail(productId);
       initProductDetail(productId);
       Transitions.initScrollReveal();
@@ -332,11 +332,14 @@ const App = (() => {
    * @returns {string} HTML string
    */
   function renderSuccessPage() {
+    const sessionId = new URLSearchParams(window.location.search).get('session_id');
+    const ref = sessionId ? sessionId.slice(-8).toUpperCase() : null;
     return `
       <div class="success-page">
         <div class="success-check" aria-hidden="true">✓</div>
-        <h2 class="success-heading">Order Received.</h2>
-        <p class="success-body">Your drop is on its way. Keep it elevated.</p>
+        <h2 class="success-heading">Order Confirmed.</h2>
+        ${ref ? `<p class="success-ref">Reference: <strong>#${ref}</strong></p>` : ''}
+        <p class="success-body">Your drop is on its way. Check your email for tracking info.</p>
         <a href="/" class="btn-outline" data-route>← BACK TO THE COLLECTION</a>
       </div>
     `;
@@ -456,7 +459,11 @@ const App = (() => {
   // ─── Init ──────────────────────────────────────────────────────────
 
   function init() {
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Load live product data from Printify before rendering any view.
+      // Falls back to the static catalog in data.js if the API is unavailable.
+      await loadProducts();
+
       initEvents();
       Transitions.initBackToTop();
       Transitions.initNavShrink();

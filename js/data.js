@@ -12,7 +12,7 @@ const COLOR_HEX = {
   'White':         '#FAFAFA'
 };
 
-const PRODUCTS = [
+let PRODUCTS = [
   {
     id: 1,
     title: 'What Lives Underground Graphic Tee',
@@ -136,4 +136,30 @@ const PRODUCTS = [
   }
 ];
 
-// PRODUCTS and COLOR_HEX are available globally (loaded via <script> tag before other JS files)
+/**
+ * Fetches live product data from /api/products (Printify via Netlify Function).
+ * Mutates the PRODUCTS array in-place so shop.js and product.js keep working
+ * without any changes — they reference the same global array.
+ *
+ * Falls back silently to the static PRODUCTS above if the API is unavailable
+ * (local dev without keys, network error, etc.).
+ *
+ * Called once during app init (app.js) before the first view renders.
+ */
+async function loadProducts() {
+  try {
+    const res = await fetch('/api/products');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (!Array.isArray(data) || !data.length) throw new Error('Empty response');
+    // Mutate in place — all existing references to PRODUCTS stay valid
+    PRODUCTS.length = 0;
+    data.forEach(p => PRODUCTS.push(p));
+  } catch (err) {
+    console.warn('[Data] Using static product fallback:', err.message);
+    // Static PRODUCTS array is already populated — nothing to do
+  }
+}
+
+// PRODUCTS, COLOR_HEX, and loadProducts() are available globally
+// (loaded via <script> tag before other JS files)

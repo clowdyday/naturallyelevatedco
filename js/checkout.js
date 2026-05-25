@@ -37,34 +37,39 @@ function initiateCheckout() {
     }))
   };
 
-  // -- STUB BEHAVIOR (remove when backend is ready) --
-  console.log('[Checkout stub] Would POST to /api/create-checkout-session:', payload);
-  alert('Stripe integration coming soon!\n\nCheck the browser console to see the cart payload that will be sent to Stripe.');
-  // -- END STUB --
+  // Show loading state on the checkout button
+  const checkoutBtn = document.getElementById('checkout-btn');
+  if (checkoutBtn) {
+    checkoutBtn.disabled = true;
+    checkoutBtn.textContent = 'PROCESSING...';
+  }
 
-  // -- REAL IMPLEMENTATION (uncomment when backend is ready) --
-  // fetch('/api/create-checkout-session', {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify(payload)
-  // })
-  //   .then(res => {
-  //     if (!res.ok) throw new Error('Network response was not ok');
-  //     return res.json();
-  //   })
-  //   .then(data => {
-  //     if (data.url) {
-  //       CartState.clearCart();
-  //       window.location.href = data.url; // Redirect to Stripe Checkout
-  //     } else {
-  //       showCheckoutError('Unable to start checkout. Please try again.');
-  //     }
-  //   })
-  //   .catch(err => {
-  //     console.error('[Checkout] Error:', err);
-  //     showCheckoutError('A network error occurred. Please try again.');
-  //   });
-  // -- END REAL IMPLEMENTATION --
+  fetch('/api/create-checkout-session', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+    .then(res => {
+      if (!res.ok) throw new Error('Network response was not ok');
+      return res.json();
+    })
+    .then(data => {
+      if (data.url) {
+        CartState.clearCart();
+        window.location.href = data.url; // Redirect to Stripe Checkout
+      } else {
+        throw new Error('No checkout URL returned');
+      }
+    })
+    .catch(err => {
+      console.error('[Checkout] Error:', err);
+      showCheckoutError('A network error occurred. Please try again.');
+      // Restore button state on error
+      if (checkoutBtn) {
+        checkoutBtn.disabled = false;
+        checkoutBtn.textContent = 'CHECKOUT';
+      }
+    });
 }
 
 /**
