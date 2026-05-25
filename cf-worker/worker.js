@@ -80,7 +80,8 @@ function transformProduct(p) {
 // ── API route handlers ─────────────────────────────────────────────────────────
 
 async function handleProducts(env) {
-  const { PRINTIFY_API_KEY, PRINTIFY_SHOP_ID } = env;
+  const PRINTIFY_API_KEY = (env.PRINTIFY_API_KEY || '').trim();
+  const PRINTIFY_SHOP_ID = (env.PRINTIFY_SHOP_ID || '').trim();
   if (!PRINTIFY_API_KEY || !PRINTIFY_SHOP_ID)
     return json({ error: 'Product API not configured' }, 503);
 
@@ -88,7 +89,11 @@ async function handleProducts(env) {
     `${PRINTIFY_BASE}/shops/${PRINTIFY_SHOP_ID}/products.json?limit=50`,
     { headers: { 'Authorization': `Bearer ${PRINTIFY_API_KEY}`, 'Content-Type': 'application/json' } }
   );
-  if (!res.ok) return json({ error: 'Failed to fetch from Printify' }, 502);
+  if (!res.ok) {
+    const errText = await res.text();
+    console.error('[products] Printify error:', res.status, errText);
+    return json({ error: 'Failed to fetch from Printify', status: res.status, detail: errText }, 502);
+  }
 
   const body = await res.json();
   const raw = Array.isArray(body) ? body : (body.data || []);
@@ -104,8 +109,8 @@ async function handleProducts(env) {
 }
 
 async function handleCheckout(request, env) {
-  const { STRIPE_SECRET_KEY } = env;
-  const origin = env.PUBLIC_SITE_ORIGIN || new URL(request.url).origin;
+  const STRIPE_SECRET_KEY = (env.STRIPE_SECRET_KEY || '').trim();
+  const origin = (env.PUBLIC_SITE_ORIGIN || '').trim() || new URL(request.url).origin;
 
   let body;
   try { body = await request.json(); }
@@ -149,7 +154,10 @@ async function handleCheckout(request, env) {
 }
 
 async function handleWebhook(request, env) {
-  const { STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, PRINTIFY_API_KEY, PRINTIFY_SHOP_ID } = env;
+  const STRIPE_SECRET_KEY = (env.STRIPE_SECRET_KEY || '').trim();
+  const STRIPE_WEBHOOK_SECRET = (env.STRIPE_WEBHOOK_SECRET || '').trim();
+  const PRINTIFY_API_KEY = (env.PRINTIFY_API_KEY || '').trim();
+  const PRINTIFY_SHOP_ID = (env.PRINTIFY_SHOP_ID || '').trim();
   const sig = request.headers.get('stripe-signature');
   const rawBody = await request.text();
 
