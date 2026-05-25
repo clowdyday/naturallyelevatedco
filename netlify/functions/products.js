@@ -103,7 +103,7 @@ exports.handler = async function handler(event) {
 
   try {
     const res = await fetch(
-      `${PRINTIFY_BASE}/shops/${PRINTIFY_SHOP_ID}/products.json?limit=100`,
+      `${PRINTIFY_BASE}/shops/${PRINTIFY_SHOP_ID}/products.json?limit=50`,
       {
         headers: {
           'Authorization': `Bearer ${PRINTIFY_API_KEY}`,
