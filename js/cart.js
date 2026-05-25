@@ -219,7 +219,9 @@ const CartState = (() => {
         const btn = e.target.closest('[data-pid]');
         if (!btn) return;
 
-        const pid = parseInt(btn.dataset.pid, 10);
+        // Support both integer IDs (static catalog) and UUID strings (Printify)
+        const rawPid = btn.dataset.pid;
+        const pid = /^\d+$/.test(rawPid) ? parseInt(rawPid, 10) : rawPid;
         const color = btn.dataset.color;
         const size = btn.dataset.size;
 

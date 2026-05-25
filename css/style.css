@@ -284,9 +284,14 @@ h4, h5, h6, .label, .section-label, .nav-link, .btn-primary, .btn-outline {
   display: none;
   flex-direction: column;
   gap: 5px;
-  padding: 6px;
+  padding: 10px 8px;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
   z-index: 110;
   background: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .hamburger-line {
@@ -309,38 +314,61 @@ h4, h5, h6, .label, .section-label, .nav-link, .btn-primary, .btn-outline {
 }
 
 /* ─── 6. MOBILE NAV OVERLAY ───────────────────────────────────────── */
+/*
+ * Starts below the fixed header stack (announcement bar + navbar)
+ * so the header stays interactive — hamburger toggle always reachable.
+ * z-index: 99 works fine since it sits below the header (z-index 100+).
+ */
 .mobile-nav-overlay {
   position: fixed;
-  inset: 0;
+  top: calc(var(--announcement-height) + var(--nav-height));
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 99;
   background: var(--bg-primary);
+  border-top: 1px solid var(--border-warm);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  /* Fade + subtle drop-down from just under the header */
   opacity: 0;
-  transform: translateX(100%);
-  transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1), transform 0.55s cubic-bezier(0.34, 1.05, 0.64, 1);
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.3s cubic-bezier(0.34, 1.05, 0.64, 1);
 }
 .mobile-nav-overlay:not([hidden]) {
   opacity: 1;
-  transform: translateX(0);
+  transform: translateY(0);
+  pointer-events: auto;
 }
 .mobile-nav-overlay[hidden] {
-  display: flex !important; /* override hidden to allow transition */
+  display: flex !important; /* keeps element in render tree so transition plays */
   pointer-events: none;
 }
 
 .mobile-nav-close {
   position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  font-size: 1.25rem;
+  top: 1rem;
+  right: 1.25rem;
+  font-size: 1.1rem;
   color: var(--text-muted);
-  padding: 8px;
-  transition: color var(--transition);
+  /* 44×44 touch target */
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: color var(--transition), background var(--transition);
+  -webkit-tap-highlight-color: transparent;
 }
-.mobile-nav-close:hover { color: var(--text-primary); }
+.mobile-nav-close:hover { color: var(--text-primary); background: rgba(255,255,255,0.06); }
 
 .mobile-nav-links {
   display: flex;
@@ -348,6 +376,9 @@ h4, h5, h6, .label, .section-label, .nav-link, .btn-primary, .btn-outline {
   align-items: center;
   gap: 2rem;
   margin-bottom: 3rem;
+  padding: 0 1.5rem;
+  width: 100%;
+  text-align: center;
 }
 
 .mobile-nav-link {
@@ -2584,10 +2615,10 @@ a, button { transition: color var(--transition), background var(--transition), o
 }
 .mobile-nav-link--sub:hover { opacity: 1; color: var(--accent-terracotta); }
 
-/* Mobile nav staggered entrance */
+/* Mobile nav staggered entrance — items fade up from below */
 @keyframes mobileNavSlide {
-  from { opacity: 0; transform: translateX(28px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 .mobile-nav-overlay:not([hidden]) .mobile-nav-links li:nth-child(1) { animation: mobileNavSlide 0.5s cubic-bezier(0.34, 1.05, 0.64, 1) 0.10s both; }
 .mobile-nav-overlay:not([hidden]) .mobile-nav-links li:nth-child(2) { animation: mobileNavSlide 0.5s cubic-bezier(0.34, 1.05, 0.64, 1) 0.18s both; }
@@ -3233,4 +3264,41 @@ a, button { transition: color var(--transition), background var(--transition), o
   .success-page {
     padding-bottom: max(3rem, calc(env(safe-area-inset-bottom) + 2rem));
   }
+}
+
+/* ─── iOS scroll lock — applied by JS when mobile nav is open ─── */
+/*
+ * position: fixed + saved scrollY prevents iOS Safari from scrolling
+ * the body beneath the overlay. JS saves/restores scroll position.
+ */
+body.mobile-nav-is-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  /* top is set inline by JS: body.style.top = `-${scrollY}px` */
+}
+
+/* ─── Mobile nav safe area bottom padding (iPhone home indicator) ─── */
+.mobile-nav-overlay {
+  padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+}
+
+/* ─── Mobile nav links: prevent tap highlight on touch ─── */
+.mobile-nav-link,
+.mobile-social-link {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ─── Mobile nav: tighter gap on short screens (landscape phone) ─── */
+@media (max-height: 600px) and (max-width: 768px) {
+  .mobile-nav-links { gap: 1.2rem; }
+  .mobile-nav-link  { font-size: 1.6rem; }
+  .mobile-nav-link--sub { font-size: 0.85rem; }
+  .mobile-nav-social { margin-top: 1.5rem; }
+}
+
+/* ─── Announcement bar: slightly smaller on narrow screens ─── */
+@media (max-width: 380px) {
+  :root { --announcement-height: 30px; }
+  .announcement-track { font-size: 0.55rem; }
 }

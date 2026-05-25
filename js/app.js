@@ -81,10 +81,13 @@ const App = (() => {
       return;
     }
 
-    // Route: product detail  /product/:id  (supports both integer and UUID Printify IDs)
+    // Route: product detail  /product/:id
+    // Supports integer IDs (static catalog) and UUID strings (Printify)
     const productMatch = path.match(/^\/product\/([a-zA-Z0-9_-]+)$/);
     if (productMatch) {
-      const productId = productMatch[1];
+      const rawId = productMatch[1];
+      // Use integer for all-numeric IDs (static catalog), keep string for Printify UUIDs
+      const productId = /^\d+$/.test(rawId) ? parseInt(rawId, 10) : rawId;
       appEl.innerHTML = renderProductDetail(productId);
       initProductDetail(productId);
       Transitions.initScrollReveal();
@@ -432,10 +435,15 @@ const App = (() => {
         if (isOpen) {
           closeMobileNav();
         } else {
+          // iOS scroll lock: save scroll position, fix body in place
+          const scrollY = window.scrollY;
+          document.body.style.top = `-${scrollY}px`;
+          document.body.classList.add('mobile-nav-is-open');
+
           mobileNav.hidden = false;
           hamburger.setAttribute('aria-expanded', 'true');
           hamburger.classList.add('is-open');
-          document.body.style.overflow = 'hidden';
+
           // Focus first link for accessibility
           const firstLink = mobileNav.querySelector('.mobile-nav-link');
           if (firstLink) firstLink.focus();
@@ -499,7 +507,14 @@ function closeMobileNav() {
     hamburger.setAttribute('aria-expanded', 'false');
     hamburger.classList.remove('is-open');
   }
-  document.body.style.overflow = '';
+
+  // iOS scroll lock restore: unfix body and scroll back to saved position
+  if (document.body.classList.contains('mobile-nav-is-open')) {
+    const scrollY = Math.abs(parseInt(document.body.style.top || '0', 10));
+    document.body.classList.remove('mobile-nav-is-open');
+    document.body.style.top = '';
+    if (scrollY) window.scrollTo(0, scrollY);
+  }
 }
 
 // Boot the app
